@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
-<!-- {% block content %} -->
+{% block content %}
 
-<h1> Homepage </h1>
-<p style="color: blue;">dfghjkfdstyjhkfgdtryuhjk</p>
+<h2>Where you get all your solutions solved</h2>
+<p style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+    This is where all the doctors and patients meet.
+</p>
 
-<!-- {% endblock %} -->
+<a href="{% url 'doctor_register' %}">Doctor Register</a> <br/><br/>
+<a href="{% url 'patient_register' %}">Patient Register</a>
+
+{% endblock %}
