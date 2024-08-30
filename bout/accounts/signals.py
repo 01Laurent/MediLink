@@ -6,7 +6,9 @@ from medilink.models import DoctorProfile, PatientsProfile
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        if instance.is_staff:
+        if instance.is_staff or instance.is_superuser:
+            return
+        if hasattr(instance, 'role') and instance.role == 'doctor':
             DoctorProfile.objects.create(user=instance)
         else:
             PatientsProfile.objects.create(user=instance)
@@ -14,6 +16,8 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     if instance.is_staff:
+        return
+    if hasattr(instance, 'role') and instance.role == 'doctor':
         instance.doctorprofile.save()
     else:
         instance.patientprofile.save()

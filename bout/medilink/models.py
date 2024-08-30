@@ -25,3 +25,22 @@ class PatientsProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"
+    
+
+class DoctorsDash(models.Model):
+    doctor = models.OneToOneField(User, on_delete=models.CASCADE)
+    total_patients = models.IntegerField(default=0)
+    active_patients = models.IntegerField(default=0)
+    total_appointments = models.IntegerField(default=0)
+    appointments_completed = models.IntegerField(default=0)
+    appointments_canceled = models.IntegerField(default=0)
+    average_patient_recovery_time = models.DurationField(null=True, blank=True)
+    common_conditions = models.TextField(null=True, blank=True)
+    show_upcoming_appointments = models.BooleanField(default=True)
+    show_patient_summary = models.BooleanField(default=True)
+    email_notifications = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Dashboard for Dr. {self.doctor.username}"
