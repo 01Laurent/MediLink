@@ -21,6 +21,10 @@ class SignUpForm(UserCreationForm):
         self.fields['password2'].widget.attrs['class']='form-control'
 
 class DoctorRegistrationForm(UserCreationForm):
+    ROLE_CHOICES = [
+        ('doctor', 'Doctor'),
+    ]
+    role = forms.ChoiceField(choices=ROLE_CHOICES, widget=forms.RadioSelect, initial='doctor', required=True)
     contact = forms.CharField(max_length=100,  widget=forms.TextInput(attrs={'class': 'form-control'}))
     speciality = forms.CharField(max_length=100,  widget=forms.TextInput(attrs={'class': 'form-control'}))
     license_number = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -30,9 +34,13 @@ class DoctorRegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2','contact', 'speciality', 'license_number', 'education', 'experience', 'clinics_worked']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'role', 'contact', 'speciality', 'license_number', 'education', 'experience', 'clinics_worked']
 
 class PatientRegistrationForm(UserCreationForm):
+    ROLE_CHOICES = [
+        ('patient', 'Patient'),
+    ]
+    role = forms.ChoiceField(choices=ROLE_CHOICES, widget=forms.RadioSelect, initial='patient', required=True)
     contact = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
     date_of_birth = forms.DateField(widget=forms.SelectDateWidget(attrs={'class': 'form-control'}))
     medical_history = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
@@ -40,4 +48,4 @@ class PatientRegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'contact', 'date_of_birth', 'medical_history', 'medications']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'role', 'contact', 'date_of_birth', 'medical_history', 'medications']

@@ -6,6 +6,8 @@ from .forms import SignUpForm, DoctorRegistrationForm, PatientRegistrationForm
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.models import User
+from medilink.models import DoctorProfile, PatientsProfile
+from django.contrib.auth import login
 
 
 class UserRegisterView(generic.CreateView):
@@ -28,6 +30,16 @@ class DoctorRegisterView(generic.CreateView):
 
     def form_valid(self, form):
         user = form.save()
+        DoctorProfile.objects.create(
+            user=User,
+            contact=form.cleaned_data['contact'],
+            speciality=form.cleaned_data['speciality'],
+            license_number=form.cleaned_data['license_number'],
+            education=form.cleaned_data['education'],
+            experience=form.cleaned_data['experience'],
+            clinics_worked=form.cleaned_data['clinics_worked']
+        )
+        login(self.request, user)
         return super().form_valid(form)
     
 class PatientRegisterView(generic.CreateView):
@@ -38,5 +50,13 @@ class PatientRegisterView(generic.CreateView):
 
     def form_valid(self, form):
         user = form.save()
+        PatientsProfile.objects.create(
+            user=User,
+            contact=form.cleaned_data['contact'],
+            date_of_birth=form.cleaned_data['date_of_birth'],
+            medical_history=form.cleaned_data['medical_history'],
+            medications=form.cleaned_data['medications']
+        )
+        login(self.request, user)
         return super().form_valid(form)
 
