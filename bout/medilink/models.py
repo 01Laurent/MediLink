@@ -14,10 +14,16 @@ class DoctorProfile(models.Model):
     experience = models.CharField(max_length=10)
     clinics_worked = models.TextField()
 
+    patients_treated = models.IntegerField(default=0)
+    upcoming_appointments = models.IntegerField(default=0)
+    total_earnings = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    notes = models.TextField(blank=True, null=True)
+
     def __str__(self):
         return f"Dr. {self.user.first_name} {self.user.last_name} {self.speciality}"
     
 class PatientsProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = models.CharField(max_length=100)
     date_of_birth = models.DateTimeField
     medical_history = models.TextField()

@@ -15,9 +15,11 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    if instance.is_staff:
+    if instance.is_staff or instance.is_superuser:
         return
     if hasattr(instance, 'role') and instance.role == 'doctor':
-        instance.doctorprofile.save()
+        if hasattr(instance, 'doctorprofile'):
+            instance.doctorprofile.save()
     else:
-        instance.patientprofile.save()
+        if hasattr(instance, 'patientsprofile'):
+            instance.patientprofile.save()
