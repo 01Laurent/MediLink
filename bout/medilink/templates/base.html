@@ -31,9 +31,14 @@
                             <a class="nav-link" href="{% url 'pat_dashboard' %}">Patdash</a>
                         </li>
                     {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                    </li>
+                    <li>
+                        <form method="post" action="{% url 'logout' %}" style="display:block;">
+                          {% csrf_token %}
+                          <button type="submit" class="dropdown-item" style="margin: 0; border: none; background: none;">
+                              Logout
+                          </button>
+                        </form>
+                      </li>
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
