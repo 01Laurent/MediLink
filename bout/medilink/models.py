@@ -21,6 +21,7 @@ class DoctorProfile(models.Model):
 
     def __str__(self):
         return f"Dr. {self.user.first_name} {self.user.last_name} {self.speciality}"
+User.add_to_class('is_doctor', property(lambda u: hasattr(u, 'doctorprofile')))
     
 class PatientsProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -31,8 +32,8 @@ class PatientsProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"
+User.add_to_class('is_patient', property(lambda u: hasattr(u, 'patientsprofile')))
     
-
 class DoctorsDash(models.Model):
     doctor = models.OneToOneField(User, on_delete=models.CASCADE)
     total_patients = models.IntegerField(default=0)
@@ -50,3 +51,30 @@ class DoctorsDash(models.Model):
 
     def __str__(self):
         return f"Dashboard for Dr. {self.doctor.username}"
+    
+
+class DoctorAvailability(models.Model):
+    doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='availability')
+    day = models.CharField(max_length=10)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    def __str__(self):
+        return f"{self.doctor} - {self.day} {self.start_time}-{self.end_time}"
+    
+class Appointment(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+    ]
+
+    patient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments')
+    doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor_appointments')
+    appointment_date = models.DateField()
+    appointment_time = models.TimeField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    notes = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"Appointment with Dr. {self.doctor} on {self.appointment_date} at {self.appointment_time}"
