@@ -22,4 +22,4 @@ def save_user_profile(sender, instance, **kwargs):
             instance.doctorprofile.save()
     else:
         if hasattr(instance, 'patientsprofile'):
-            instance.patientprofile.save()
+            instance.patientsprofile.save()

@@ -1,8 +1,9 @@
+from typing import Any
 from django.shortcuts import render
 # from .models import Post
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import DoctorsDash
+from .models import DoctorsDash, PatientsProfile
 
 
 def HomeView(request):
@@ -21,5 +22,18 @@ class DocDashView(LoginRequiredMixin, TemplateView):
                 'upcoming_appointments': profile.upcoming_appointments,
                 'total_earnings': profile.total_earnings,
                 'notes': profile.notes,
+            }
+        return context
+
+class PatDahView(LoginRequiredMixin, TemplateView):
+    template_name = 'patdash.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if hasattr(user, 'patientsprofile'):
+            profile = user.patientsprofile
+            context['dashboard'] = {
+                
             }
         return context

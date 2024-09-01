@@ -31,19 +31,18 @@
                             <a class="nav-link" href="{% url 'pat_dashboard' %}">Patdash</a>
                         </li>
                     {% endif %}
-                    <li>
-                        <form method="post" action="{% url 'logout' %}" style="display:block;">
-                          {% csrf_token %}
-                          <button type="submit" class="dropdown-item" style="margin: 0; border: none; background: none;">
-                              Logout
-                          </button>
-                        </form>
-                      </li>
+                        <li>
+                            <form method="post" action="{% url 'logout' %}" style="display:block;">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item" style="margin: 0; border: none; background: none;">
+                                Logout
+                            </button>
+                            </form>
+                        </li>
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>
-                {% endif %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Register
@@ -53,16 +52,7 @@
                         <li><a class="dropdown-item" href="{% url 'patient_register' %}">Patient</a></li>
                     </ul>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown link
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
+                {% endif %}
             </ul>
         </div>
     </div>

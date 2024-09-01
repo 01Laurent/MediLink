@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
+{% if user.is_authenticated %}
 <h1>Welcome, Dr. {{ user.first_name }}!</h1>
   <p>Patients Treated: {{ dashboard.patients_treated }}</p>
   <p>Upcoming Appointments: {{ dashboard.upcoming_appointments }}</p>
   <p>Total Earnings: ${{ dashboard.total_earnings }}</p>
   <p>Notes: {{ dashboard.notes }}</p>
+  {% else %}
+    <p><strong>You are nor allowed here and you know it!!!</strong></p>
+  {% endif %}
 {% endblock %}
