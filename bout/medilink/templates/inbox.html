@@ -4,7 +4,7 @@
 <ul class="list-group">
     {% for message in messages %}
     <li class="list-group-item {% if not message.is_read %}font-weight-bold{% endif %}">
-        <a href="#">{{ message.sender }}: {{ message.content|truncatewords:10 }}</a>
+        <a href="#">{{ message.sender }}: {{ message.decrypted_content|truncatewords:10 }}</a>
         <small class="text-muted float-right">{{ message.timestamp }}</small>
     </li>
     {% endfor %}

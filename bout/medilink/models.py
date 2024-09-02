@@ -3,10 +3,15 @@ from django.db import models
 from django.contrib.auth.models import User
 # from django.urls import reverse
 from datetime import datetime, date
+from cryptography.fernet import Fernet
+from django.conf import settings
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class DoctorProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    is_doctor = models.BooleanField(default=False)
     contact = models.CharField(max_length=100)
     speciality = models.CharField(max_length=100)
     license_number = models.CharField(max_length=50, unique=True)
@@ -85,6 +90,16 @@ class Message(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None: 
+            fernet = Fernet(settings.ENCRYPTION_KEY)
+            self.encrypted_content = fernet.encrypt(self.encrypted_content.encode()).decode()
+        super().save(*args, **kwargs)
+
+    def get_decrypted_content(self):
+        fernet = Fernet(settings.ENCRYPTION_KEY)
+        return fernet.decrypt(self.encrypted_content.encode()).decode()
 
     def __str__(self):
         return f"Message from {self.sender} to {self.receiver} at {self.timestamp}"

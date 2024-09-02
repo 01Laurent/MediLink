@@ -2,5 +2,9 @@
 {% block content %}
 <h1>Welcome, {{ user.first_name }}!</h1>
 
+<li><a class="dropdown-item" href="{% url 'inbox' %}">Inbox</a></li>
+<li><a class="dropdown-item" href="{% url 'sent_messages' %}">Sent</a></li>
+<li><a class="dropdown-item" href="{% url 'inbox' %}">Inbox</a></li>
+<li><a class="dropdown-item" href="{% url 'compose_message' %}">Send Message</a></li>
 
 {% endblock %}

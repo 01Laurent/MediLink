@@ -1,5 +1,9 @@
 from django import forms
-from .models import Appointment, DoctorAvailability, Message
+from .models import Appointment, DoctorAvailability, Message, User
+from django.contrib.auth import get_user_model
+from django.conf import settings
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class AppointmentForm(forms.ModelForm):
     doctor = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -22,9 +26,17 @@ class DoctorAvailabilityForm(forms.ModelForm):
         fields = ['day', 'start_time', 'end_time']
 
 class MessageForm(forms.ModelForm):
-    model = Message
-    fields = ['receiver', 'content']
-    widgets = {
-        'receiver': forms.Select(attrs={'class': 'form-control'}),
+    class Meta:
+
+        model = Message
+        fields = ['receiver', 'content']
+        widgets = {
+            'receiver': forms.Select(attrs={'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
-    }
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Only show doctors as options in the receiver field
+        self.fields['receiver'].queryset = User.objects.filter(
+            doctorprofile__is_doctor=True
+        )
