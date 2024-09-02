@@ -6,8 +6,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import DoctorsDash, PatientsProfile, Appointment, DoctorAvailability
-from .forms import AppointmentForm, DoctorAvailabilityForm
+from .models import DoctorsDash, PatientsProfile, Appointment, DoctorAvailability, Message
+from .forms import AppointmentForm, DoctorAvailabilityForm, MessageForm
 
 
 def HomeView(request):
@@ -74,3 +74,29 @@ class AppointmentListView(ListView):
             return Appointment.objects.filter(patient=user)
         else:
             return Appointment.objects.none()
+        
+class InboxView(LoginRequiredMixin, ListView):
+    model = Message
+    template_name = 'inbox.html'
+    content_type_name = 'messages'
+
+    def get_queryset(self):
+        return Message.objects.filter(receiver=self.request.user).order_by('-timestamp')
+    
+class SentMessagesView(LoginRequiredMixin, ListView):
+    model = Message
+    template_name = 'sent_messages.html'
+    content_type_name = 'messages'
+
+    def get_queryset(self):
+        return Message.objects.filter(receiver=self.request.user).order_by('-timestamp')
+    
+class ComposeMessageView(LoginRequiredMixin, ListView):
+    model = Message
+    form_class = MessageForm
+    template_name = 'compose_message.html'
+    success_url = reverse_lazy('inbox')
+
+    def form_valid(self, form):
+        form.instance.sender = self.request.user
+        return super().form_valid(form)

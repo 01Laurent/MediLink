@@ -1,5 +1,5 @@
 from django import forms
-from .models import Appointment, DoctorAvailability
+from .models import Appointment, DoctorAvailability, Message
 
 class AppointmentForm(forms.ModelForm):
     doctor = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -21,3 +21,10 @@ class DoctorAvailabilityForm(forms.ModelForm):
         model = DoctorAvailability
         fields = ['day', 'start_time', 'end_time']
 
+class MessageForm(forms.ModelForm):
+    model = Message
+    fields = ['receiver', 'content']
+    widgets = {
+        'receiver': forms.Select(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+    }
