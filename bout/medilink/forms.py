@@ -20,3 +20,4 @@ class DoctorAvailabilityForm(forms.ModelForm):
     class Meta:
         model = DoctorAvailability
         fields = ['day', 'start_time', 'end_time']
+
