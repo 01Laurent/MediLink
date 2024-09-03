@@ -35,9 +35,14 @@
                             <form method="post" action="{% url 'logout' %}" style="display:block;">
                             {% csrf_token %}
                             <button type="submit" class="dropdown-item" style="margin: 0; border: none; background: none;">
-                                Logout
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
                             </button>
                             </form>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'inbox' %}">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/></svg>
+                            </a>
                         </li>
                 {% else %}
                     <li class="nav-item">

@@ -12,4 +12,6 @@
     <li class="list-group-item">No messages to display.</li>
     {% endfor %}
 </ul>
+<li><a class="dropdown-item" href="{% url 'sent_messages' %}">Sent</a></li>
+<li><a class="dropdown-item" href="{% url 'compose_message' %}">Send Message</a></li>
 {% endblock %}

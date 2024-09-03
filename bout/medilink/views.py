@@ -89,7 +89,7 @@ class SentMessagesView(LoginRequiredMixin, ListView):
     content_type_name = 'messages'
 
     def get_queryset(self):
-        return Message.objects.filter(receiver=self.request.user).order_by('-timestamp')
+        return Message.objects.filter(sender=self.request.user).order_by('-timestamp')
     
 class ComposeMessageView(LoginRequiredMixin, CreateView):
     model = Message
@@ -98,5 +98,8 @@ class ComposeMessageView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('inbox')
 
     def form_valid(self, form):
+        print("Form data before saving:", form.cleaned_data)
         form.instance.sender = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        print("Message saved with content:", form.instance.content)
+        return response

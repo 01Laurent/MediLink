@@ -98,6 +98,10 @@ class Message(models.Model):
         if self.pk is None and self.content: 
             fernet = Fernet(settings.ENCRYPTION_KEY)
             self.encrypted_content = fernet.encrypt(self.content.encode()).decode()
+        #     self.content = None
+        # elif self.pk and self.encrypted_content and not self.content:
+        #      fernet = Fernet(settings.ENCRYPTION_KEY)
+        #      self.content = fernet.decrypt(self.encrypted_content.encode()).decode()
         super().save(*args, **kwargs)
 
     def get_decrypted_content(self):

@@ -4,9 +4,15 @@
 <ul class="list-group">
     {% for message in messages %}
     <li class="list-group-item">
-        <a href="#">{{ message.receiver }}: {{ message.content|truncatewords:10 }}</a>
-        <small class="text-muted float-right">{{ message.timestamp }}</small>
+        <p>From: {{ message.sender }}</p>
+        <p>To: {{ message.receiver }}</p>
+        <p>Content: {{ message.content }}</p>
+        <p>Date: {{ message.timestamp }}</p>
+        <!-- <a href="#">{{ message.receiver }}: {{ message.content|truncatewords:10 }}</a>
+        <small class="text-muted float-right">{{ message.timestamp }}</small> -->
     </li>
+    {% empty %}
+    <li class="list-group-item">No sent messages to display.</li>
     {% endfor %}
 </ul>
 {% endblock %}
