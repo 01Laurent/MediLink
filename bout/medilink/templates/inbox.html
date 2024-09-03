@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <h2>Inbox</h2>
 <ul class="list-group">
@@ -7,6 +8,8 @@
         <a href="#">{{ message.sender }}: {{ message.decrypted_content|truncatewords:10 }}</a>
         <small class="text-muted float-right">{{ message.timestamp }}</small>
     </li>
+    {% empty %}
+    <li class="list-group-item">No messages to display.</li>
     {% endfor %}
 </ul>
 {% endblock %}

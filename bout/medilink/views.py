@@ -81,10 +81,7 @@ class InboxView(LoginRequiredMixin, ListView):
     content_type_name = 'messages'
 
     def get_queryset(self):
-        messages = Message.objects.filter(receiver=self.request.user).order_by('-timestamp')
-        for message in messages:
-            message.decrypted_content = message.get_decrypted_content()
-        return messages
+        return Message.objects.filter(receiver=self.request.user).order_by('-timestamp')
     
 class SentMessagesView(LoginRequiredMixin, ListView):
     model = Message

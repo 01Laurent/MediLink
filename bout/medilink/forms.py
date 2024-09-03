@@ -38,5 +38,5 @@ class MessageForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Only show doctors as options in the receiver field
         self.fields['receiver'].queryset = User.objects.filter(
-            doctorprofile__is_doctor=True
+            doctorprofile__isnull=False
         )

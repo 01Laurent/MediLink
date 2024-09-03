@@ -10,8 +10,8 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class DoctorProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    is_doctor = models.BooleanField(default=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)    
+    is_doctor = models.BooleanField(default=True)
     contact = models.CharField(max_length=100)
     speciality = models.CharField(max_length=100)
     license_number = models.CharField(max_length=50, unique=True)
@@ -26,8 +26,10 @@ class DoctorProfile(models.Model):
 
     def __str__(self):
         return f"Dr. {self.user.first_name} {self.user.last_name} {self.speciality}"
-User.add_to_class('is_doctor', property(lambda u: hasattr(u, 'doctorprofile')))
-    
+User.add_to_class(
+    'is_doctor', 
+    property(lambda u: DoctorProfile.objects.filter(user=u).exists())
+)    
 class PatientsProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = models.CharField(max_length=100)
@@ -87,19 +89,22 @@ class Appointment(models.Model):
 class Message(models.Model):
     sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
+    encrypted_content = models.TextField(blank=True, null=True)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        if self.pk is None: 
+        if self.pk is None and self.content: 
             fernet = Fernet(settings.ENCRYPTION_KEY)
-            self.encrypted_content = fernet.encrypt(self.encrypted_content.encode()).decode()
+            self.encrypted_content = fernet.encrypt(self.content.encode()).decode()
         super().save(*args, **kwargs)
 
     def get_decrypted_content(self):
-        fernet = Fernet(settings.ENCRYPTION_KEY)
-        return fernet.decrypt(self.encrypted_content.encode()).decode()
+        if self.encrypted_content:
+            fernet = Fernet(settings.ENCRYPTION_KEY)
+            return fernet.decrypt(self.encrypted_content.encode()).decode()
+        return self.content
 
     def __str__(self):
         return f"Message from {self.sender} to {self.receiver} at {self.timestamp}"
