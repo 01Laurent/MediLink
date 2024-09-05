@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <h2>Inbox</h2>
-<ul class="list-group">
+<ul class="list-group" id="inbox-messages">
     {% for message in messages %}
     <li class="list-group-item {% if not message.is_read %}font-weight-bold{% endif %}">
         <a href="#">{{ message.sender }}: {{ message.decrypted_content|truncatewords:10 }}</a>
@@ -12,6 +11,26 @@
     <li class="list-group-item">No messages to display.</li>
     {% endfor %}
 </ul>
+<script>
+    const userName = '{{ request.user.username }}';
+    const chatSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/' + userName + '/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const chatLog = document.querySelector('#inbox-messages');
+        const newMessage = document.createElement('li');
+        newMessage.className = 'list-group-item';
+        newMessage.textContent = `${data.sender}: ${data.message}`;
+        chatLog.appendChild(newMessage);
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+</script>
 <li><a class="dropdown-item" href="{% url 'sent_messages' %}">Sent</a></li>
 <li><a class="dropdown-item" href="{% url 'compose_message' %}">Send Message</a></li>
+
 {% endblock %}

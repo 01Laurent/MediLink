@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'medilink',
     'accounts',
+    'channels',
 ]
+ASGI_APPLICATION = 'bout.asgi.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

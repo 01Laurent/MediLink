@@ -82,6 +82,7 @@ class InboxView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Message.objects.filter(receiver=self.request.user).order_by('-timestamp')
+        print(messages)
     
 class SentMessagesView(LoginRequiredMixin, ListView):
     model = Message
@@ -103,3 +104,6 @@ class ComposeMessageView(LoginRequiredMixin, CreateView):
         response = super().form_valid(form)
         print("Message saved with content:", form.instance.content)
         return response
+
+def chat_view(request):
+    return render(request, 'chat.html')

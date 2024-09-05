@@ -36,7 +36,7 @@ class MessageForm(forms.ModelForm):
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Only show doctors as options in the receiver field
-        self.fields['receiver'].queryset = User.objects.filter(
-            doctorprofile__isnull=False
-        )
+        self.fields['receiver'].queryset = User.objects.exclude(id=self.initial.get('exclude_user_id'))
+
+class SearchForm(forms.Form):
+    query = forms.CharField(label='Search Doctors', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
