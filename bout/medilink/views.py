@@ -127,6 +127,4 @@ def home(request):
     elif availability == 'not_available':
         doctors = doctors.filter(is_available=False)
     results = list(doctors.values('user__first_name', 'user__last_name', 'specialty', 'location', 'is_available'))
-    # print('Results:', results)
     return JsonResponse({'doctors': results})
-    # return render(request, 'home.html', {'doctors': doctors, 'search_perfomed': bool(request.GET)})
