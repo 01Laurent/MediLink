@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import DoctorsDash, PatientsProfile, Appointment, DoctorAvailability, Message
+from .models import DoctorsDash, PatientsProfile, Appointment, DoctorAvailability, Message, DoctorProfile
 from .forms import AppointmentForm, DoctorAvailabilityForm, MessageForm
 
 
@@ -107,3 +107,20 @@ class ComposeMessageView(LoginRequiredMixin, CreateView):
 
 def chat_view(request):
     return render(request, 'chat.html')
+
+def home(request):
+    speciality = request.GET.get('speciality', '')
+    location = request.GET.get('location', '')
+    availability = request.GET.get('availability', '')
+    doctors = DoctorProfile.objects.all()
+    if speciality:
+        doctors = doctors.filter(speciality__icontains=speciality)
+
+    if location:
+        doctors = doctors.filter(location__icontains=location)
+
+    if availability == 'available':
+        doctors = doctors.filter(is_available=True)
+    elif availability == 'not_available':
+        doctors = doctors.filter(is_available=False)
+    return render(request, 'home.html', {'doctors': doctors, 'search_perfomed': bool(request.GET)})

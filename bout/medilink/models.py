@@ -14,6 +14,8 @@ class DoctorProfile(models.Model):
     is_doctor = models.BooleanField(default=True)
     contact = models.CharField(max_length=100)
     speciality = models.CharField(max_length=100)
+    location = models.CharField(max_length=100, default='Nairobi')
+    is_available = models.BooleanField(default=True)
     license_number = models.CharField(max_length=50, unique=True)
     education = models.CharField(max_length=150)
     experience = models.CharField(max_length=10)

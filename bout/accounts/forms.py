@@ -23,6 +23,7 @@ class SignUpForm(UserCreationForm):
 class DoctorRegistrationForm(UserCreationForm):
     contact = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
     speciality = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    location = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
     license_number = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
     education = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class': 'form-control'}))
     experience = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -30,7 +31,7 @@ class DoctorRegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'contact', 'speciality', 'license_number', 'education', 'experience', 'clinics_worked']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'contact', 'speciality', 'location', 'license_number', 'education', 'experience', 'clinics_worked']
 
     def save(self, commit=True):
         user = super().save(commit=False)

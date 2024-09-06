@@ -1,6 +1,6 @@
 from django.forms import BaseModelForm
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, Http404
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from .forms import DoctorRegistrationForm, PatientRegistrationForm
 from django.urls import reverse_lazy
@@ -59,4 +59,5 @@ class PatientRegisterView(generic.CreateView):
             )
             login(self.request, user)
             return super().form_valid(form)
+        
 
