@@ -1,12 +1,13 @@
 from typing import Any
 from django.db.models.query import QuerySet
 from django.forms import BaseModelForm
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.http import require_GET
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import DoctorsDash, PatientsProfile, Appointment, DoctorAvailability, Message, DoctorProfile
+from medilink.models import DoctorsDash, PatientsProfile, Appointment, DoctorAvailability, Message, DoctorProfile
 from .forms import AppointmentForm, DoctorAvailabilityForm, MessageForm
 
 
@@ -109,12 +110,14 @@ def chat_view(request):
     return render(request, 'chat.html')
 
 def home(request):
-    speciality = request.GET.get('speciality', '')
+    specialty = request.GET.get('specialty', '')
     location = request.GET.get('location', '')
     availability = request.GET.get('availability', '')
+
     doctors = DoctorProfile.objects.all()
-    if speciality:
-        doctors = doctors.filter(speciality__icontains=speciality)
+
+    if specialty :
+        doctors = doctors.filter(specialty__icontains=specialty )
 
     if location:
         doctors = doctors.filter(location__icontains=location)
@@ -123,4 +126,7 @@ def home(request):
         doctors = doctors.filter(is_available=True)
     elif availability == 'not_available':
         doctors = doctors.filter(is_available=False)
-    return render(request, 'home.html', {'doctors': doctors, 'search_perfomed': bool(request.GET)})
+    results = list(doctors.values('user__first_name', 'user__last_name', 'specialty', 'location', 'is_available'))
+    # print('Results:', results)
+    return JsonResponse({'doctors': results})
+    # return render(request, 'home.html', {'doctors': doctors, 'search_perfomed': bool(request.GET)})

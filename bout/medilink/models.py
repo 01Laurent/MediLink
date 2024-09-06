@@ -11,10 +11,9 @@ User = get_user_model()
 
 class DoctorProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)    
-    is_doctor = models.BooleanField(default=True)
     contact = models.CharField(max_length=100)
-    speciality = models.CharField(max_length=100)
-    location = models.CharField(max_length=100, default='Nairobi')
+    specialty = models.CharField(max_length=100)
+    location = models.CharField(max_length=100,)
     is_available = models.BooleanField(default=True)
     license_number = models.CharField(max_length=50, unique=True)
     education = models.CharField(max_length=150)
@@ -27,11 +26,12 @@ class DoctorProfile(models.Model):
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"Dr. {self.user.first_name} {self.user.last_name} {self.speciality}"
+        return f"Dr. {self.user.first_name} {self.user.last_name} {self.specialty}"
 User.add_to_class(
     'is_doctor', 
     property(lambda u: DoctorProfile.objects.filter(user=u).exists())
-)    
+)
+
 class PatientsProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = models.CharField(max_length=100)

@@ -2,6 +2,7 @@ from django.urls import path
 from .import consumers
 from .views import HomeView, DocDashView, PatDahView, ScheduleAppointmentView, DoctorAvailabilityView, AppointmentListView,ComposeMessageView, SentMessagesView, InboxView
 from .import views
+from .views import home
 
 urlpatterns = [
     path('', HomeView, name='home'),
@@ -14,6 +15,8 @@ urlpatterns = [
     path('sent/', SentMessagesView.as_view(), name='sent_messages'),
     path('compose/', ComposeMessageView.as_view(), name='compose_message'),
     path('chat/', views.chat_view, name='chat'),
+    path('search-doctors/', home, name='search_doctors'),
+    path('home/', views.home, name='home'),
 ]
 
 websocket_urlpatterns = [

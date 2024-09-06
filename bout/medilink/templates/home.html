@@ -1,34 +1,92 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
-<h1 style="font-family:'Courier New', Courier, monospace; font-size: 4rem; text-align: center; color: red;"><strong>MediLink</strong></h1>
+<h1 style="font-family:'Courier New', Courier, monospace; font-size: 4rem; text-align: center; color: red;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-heart-pulse" viewBox="0 0 16 16">
+        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053.918 3.995.78 5.323 1.508 7H.43c-2.128-5.697 4.165-8.83 7.394-5.857q.09.083.176.171a3 3 0 0 1 .176-.17c3.23-2.974 9.522.159 7.394 5.856h-1.078c.728-1.677.59-3.005.108-3.947C13.486.878 10.4.28 8.717 2.01zM2.212 10h1.315C4.593 11.183 6.05 12.458 8 13.795c1.949-1.337 3.407-2.612 4.473-3.795h1.315c-1.265 1.566-3.14 3.25-5.788 5-2.648-1.75-4.523-3.434-5.788-5"/>
+        <path d="M10.464 3.314a.5.5 0 0 0-.945.049L7.921 8.956 6.464 5.314a.5.5 0 0 0-.88-.091L3.732 8H.5a.5.5 0 0 0 0 1H4a.5.5 0 0 0 .416-.223l1.473-2.209 1.647 4.118a.5.5 0 0 0 .945-.049l1.598-5.593 1.457 3.642A.5.5 0 0 0 12 9h3.5a.5.5 0 0 0 0-1h-3.162z"/>
+      </svg>
+    <strong>MediLink</strong>
+</h1>
 
 <br/> 
 <h3 style="text-align: center;">Search for Proffesionals</h3><br/>
+
 <div class="container-fluid">
-    <form class="d-flex" method="get">
-        <input class="form-control me-2" type="text" name="speciality" placeholder="Speciality" aria-label="Speciality">
+    <form id="searchForm" class="d-flex">
+        <input class="form-control me-2" type="text" name="specialty" placeholder="Specialty" aria-label="Speciality">
         <input class="form-control me-2" type="text" name="location" placeholder="Location" aria-label="Location">
         <select class="form-control me-2" name="availability">
             <option value="">Any availability</option>
-            <option value="">Available</option>
-            <option value="">not_available</option>
+            <option value="available">Available</option>
+            <option value="not_available">Not Available</option>
+        </select>
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+    <div id="results" class="mt-4"></div>
+</div>
+
+<script>
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevents the default form submission
+
+    const formData = new FormData(this);
+    const queryString = new URLSearchParams(formData).toString();
+
+    fetch(`/home/?${queryString}`)
+        .then(response => response.json())
+        .then(data => {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
+
+            if (data.doctors.length === 0) {
+                resultsContainer.innerHTML = '<p>No doctors found matching your criteria.</p>';
+            } else {
+                const ul = document.createElement('ul');
+                data.doctors.forEach(doctor => {
+                    const li = document.createElement('li');
+                    li.classList.add('list-group-item');
+                    li.innerHTML = `
+                        <strong>${doctor.user__first_name} ${doctor.user__last_name}</strong><br/>
+                        Specialty: ${doctor.specialty}<br/>
+                        Location: ${doctor.location}<br/>
+                        Availability: ${doctor.is_available ? 'Available' : 'Not Available'}
+                    `;
+                    ul.appendChild(li);
+                });
+                resultsContainer.appendChild(ul);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+</script>
+<!-- <div class="container-fluid">
+    <form class="d-flex"  method="get">
+        <input class="form-control me-2" type="text" name="specialty" placeholder="Specialty" aria-label="Specialty">
+        <input class="form-control me-2" type="text" name="location" placeholder="Location" aria-label="Location">
+        <select class="form-control me-2" name="availability">
+            <option value="">Any availability</option>
+            <option value="available">Available</option>
+            <option value="not_available">not_available</option>
         </select>
         <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
     {% if search_perfomed %}
         <div class="dropdown mt-4">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="searchResultsDropdown" data-bs-toggle="dropdown" arial-expanded="false">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="searchResultsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 Search Results
             </button>
-            <ul class="dropdown-menu" arial-labelledby="searchResultsDropdown">
-                {% if doctor %}
+            <ul class="dropdown-menu" aria-labelledby="searchResultsDropdown">
+                {% if doctors %}
                     {% for doctor in doctors %}
                         <li class="dropdown-item">
-                            <strong>{{ doctor.name }}</strong><br/>
-                            Speciality: {{ doctor.speciality }}<br/>
+                            <strong>{{ doctor.user.first_name }}</strong><br/>
+                            Specialty : {{ doctor.specialty  }}<br/>
                             Location: {{ doctor.location }}<br/>
-                            availability: {% if doctor.is_available %} Availability {% else %} Not Available {% endif %}
+                            availability: {% if doctor.is_available %} Available {% else %} Not Available {% endif %}
                             <a href="{% url 'schedule_appointment' doctor.id %}" class="btn btn-primary btn-sm mt-2">Book Appointment.</a>
                         </li>
                     {% endfor %}
@@ -38,7 +96,7 @@
             </ul>
         </div>
     {% endif %}
-</div>
+</div> -->
 <br/> <br/>
 <h2 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; text-align: center;">
     Welcome to MediLink, your trusted place to connect with healthcare professionals.
@@ -49,12 +107,13 @@
         This is where all doctors and patients Connect.
     </p>
 
-    Are you a Doctor?, seeking to help patients register here <a href="{% url 'doctor_register' %}" class="btn btn-info">Doctor Register</a> <br/><br/>
-    Are you a Patient?, seeking consultation? register here <a href="{% url 'patient_register' %}"class="btn btn-info">Patient Register</a> <br/> <br/>
-    Already have an account? <a href="{% url 'login' %}"class="btn btn-info">Login</a>
+    Are you a Doctor?, seeking to help patients register here - <a href="{% url 'doctor_register' %}" class="btn btn-info">Doctor Register</a> <br/><br/>
+    Are you a Patient?, seeking consultation? register here - <a href="{% url 'patient_register' %}"class="btn btn-info">Patient Register</a> <br/> <br/>
+    Already have an account? - <a href="{% url 'login' %}"class="btn btn-info">Login</a>
     <br/> <br/>
 </div>
 
+<!-- <script src="{% static 'js/search.js' %}"></script> -->
 
 {% endblock %}
 

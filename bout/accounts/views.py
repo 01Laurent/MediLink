@@ -32,7 +32,8 @@ class DoctorRegisterView(generic.CreateView):
             DoctorProfile.objects.create(
                 user=user,
                 contact=form.cleaned_data['contact'],
-                speciality=form.cleaned_data['speciality'],
+                specialty=form.cleaned_data['specialty'],
+                location=form.cleaned_data['location'],
                 license_number=form.cleaned_data['license_number'],
                 education=form.cleaned_data['education'],
                 experience=form.cleaned_data['experience'],

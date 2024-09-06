@@ -22,7 +22,7 @@ class SignUpForm(UserCreationForm):
 
 class DoctorRegistrationForm(UserCreationForm):
     contact = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    speciality = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    specialty = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
     location = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
     license_number = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
     education = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -31,7 +31,7 @@ class DoctorRegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'contact', 'speciality', 'location', 'license_number', 'education', 'experience', 'clinics_worked']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'contact', 'specialty', 'location', 'license_number', 'education', 'experience', 'clinics_worked']
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -39,9 +39,9 @@ class DoctorRegistrationForm(UserCreationForm):
         if commit:
             user.save()
             DoctorProfile.objects.create(user=user, contact=self.cleaned_data['contact'], 
-                                          speciality=self.cleaned_data['speciality'], license_number=self.cleaned_data['license_number'], 
+                                          specialty=self.cleaned_data['specialty'], license_number=self.cleaned_data['license_number'], 
                                           education=self.cleaned_data['education'], experience=self.cleaned_data['experience'], 
-                                          clinics_worked=self.cleaned_data['clinics_worked'])
+                                          clinics_worked=self.cleaned_data['clinics_worked'], location=self.cleaned_data['location'])
         return user
 
 class PatientRegistrationForm(UserCreationForm):
