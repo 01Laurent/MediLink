@@ -61,4 +61,8 @@ class PatientRegisterView(generic.CreateView):
             login(self.request, user)
             return super().form_valid(form)
         
-
+class EditProfileView(generic.UpdateView):
+    model = DoctorProfile
+    template_name = ('registration/edit_profile_page.html')
+    fields = ['contact', 'specialty', 'location', 'is_available', 'education', 'experience', 'clinics_worked']
+    success_url = reverse_lazy('home')

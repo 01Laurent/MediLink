@@ -10,10 +10,15 @@
     <strong>MediLink</strong>
 </h1>
 
-<br/> 
-<h3 style="text-align: center;">Search for Proffesionals</h3><br/>
+<br/>
+<h2 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; text-align: center;">
+    Welcome to MediLink, your trusted place to connect with healthcare professionals.
+</h2>
 
-<div class="container-fluid">
+<br/> 
+
+<div class="container-fluid" style="justify-content: center; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 5px;"><br/>
+    <h4 style="text-align: center;">Search for Proffesionals.</h4>
     <form id="searchForm" class="d-flex">
         <input class="form-control me-2" type="text" name="specialty" placeholder="Specialty" aria-label="Speciality">
         <input class="form-control me-2" type="text" name="location" placeholder="Location" aria-label="Location">
@@ -24,9 +29,8 @@
         </select>
         <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
-    <div id="results" class="mt-4"></div>
+    <div id="results" class="mt-4"></div><br/>
 </div>
-
 <script>
     document.getElementById('searchForm').addEventListener('submit', function(event) {
     event.preventDefault();  // Prevents the default form submission
@@ -63,6 +67,8 @@
         });
 });
 </script>
+
+
 <!-- <div class="container-fluid">
     <form class="d-flex"  method="get">
         <input class="form-control me-2" type="text" name="specialty" placeholder="Specialty" aria-label="Specialty">
@@ -98,10 +104,6 @@
     {% endif %}
 </div> -->
 <br/> <br/>
-<h2 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; text-align: center;">
-    Welcome to MediLink, your trusted place to connect with healthcare professionals.
-</h2>
-<br/> <br/>
 <div class="container" style="justify-content: center; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 5px;"> </br>
     <p style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-size: 2rem;">
         This is where all doctors and patients Connect.
@@ -113,7 +115,8 @@
     <br/> <br/>
 </div>
 
-<!-- <script src="{% static 'js/search.js' %}"></script> -->
 
 {% endblock %}
+<!-- <script src="{% static 'medilink/js/search.js' %}"></script> -->
+
 

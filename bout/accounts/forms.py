@@ -38,10 +38,15 @@ class DoctorRegistrationForm(UserCreationForm):
         user.is_staff = True  # Assuming doctors are staff members
         if commit:
             user.save()
-            DoctorProfile.objects.create(user=user, contact=self.cleaned_data['contact'], 
-                                          specialty=self.cleaned_data['specialty'], license_number=self.cleaned_data['license_number'], 
-                                          education=self.cleaned_data['education'], experience=self.cleaned_data['experience'], 
-                                          clinics_worked=self.cleaned_data['clinics_worked'], location=self.cleaned_data['location'])
+            DoctorProfile.objects.create(user=user,
+                                        contact=self.cleaned_data['contact'], 
+                                        specialty=self.cleaned_data['specialty'],
+                                        location=self.cleaned_data['location'],
+                                        license_number=self.cleaned_data['license_number'], 
+                                        education=self.cleaned_data['education'],
+                                        experience=self.cleaned_data['experience'], 
+                                        clinics_worked=self.cleaned_data['clinics_worked'],
+                                        )
         return user
 
 class PatientRegistrationForm(UserCreationForm):
