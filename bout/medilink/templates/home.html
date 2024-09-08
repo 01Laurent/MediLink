@@ -17,9 +17,9 @@
 
 <br/> 
 
-<div class="container-fluid" style="justify-content: center; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 5px;"><br/>
-    <h4 style="text-align: center;">Search for Proffesionals.</h4>
-    <form id="searchForm" class="d-flex">
+<div class="container-fluid" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 5px;"><br/>
+    <h4 style="text-align: center;">Search for Professionals.</h4>
+    <form id="searchForm" class="d-flex justify-content-center">
         <input class="form-control me-2" type="text" name="specialty" placeholder="Specialty" aria-label="Speciality">
         <input class="form-control me-2" type="text" name="location" placeholder="Location" aria-label="Location">
         <select class="form-control me-2" name="availability">
@@ -31,42 +31,72 @@
     </form>
     <div id="results" class="mt-4"></div><br/>
 </div>
+
+<style>
+    #results {
+        position: relative;
+        z-index: 1000;
+        margin-bottom: 20px;
+    }
+
+    .doctor-card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .doctor-card h5 {
+        font-weight: bold;
+    }
+</style>
+
 <script>
     document.getElementById('searchForm').addEventListener('submit', function(event) {
-    event.preventDefault();  // Prevents the default form submission
+        event.preventDefault();  // Prevents the default form submission
 
-    const formData = new FormData(this);
-    const queryString = new URLSearchParams(formData).toString();
+        const formData = new FormData(this);
+        const queryString = new URLSearchParams(formData).toString();
 
-    fetch(`/home/?${queryString}`)
-        .then(response => response.json())
-        .then(data => {
-            const resultsContainer = document.getElementById('results');
-            resultsContainer.innerHTML = '';
+        fetch(`/search_doctors/?${queryString}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultsContainer = document.getElementById('results');
+                resultsContainer.innerHTML = '';
 
-            if (data.doctors.length === 0) {
-                resultsContainer.innerHTML = '<p>No doctors found matching your criteria.</p>';
-            } else {
-                const ul = document.createElement('ul');
-                data.doctors.forEach(doctor => {
-                    const li = document.createElement('li');
-                    li.classList.add('list-group-item');
-                    li.innerHTML = `
-                        <strong>${doctor.user__first_name} ${doctor.user__last_name}</strong><br/>
-                        Specialty: ${doctor.specialty}<br/>
-                        Location: ${doctor.location}<br/>
-                        Availability: ${doctor.is_available ? 'Available' : 'Not Available'}
-                    `;
-                    ul.appendChild(li);
-                });
-                resultsContainer.appendChild(ul);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-});
+                if (data.doctors.length === 0) {
+                    resultsContainer.innerHTML = '<p>No doctors found matching your criteria.</p>';
+                } else {
+                    const row = document.createElement('div');
+                    row.classList.add('row');
+                    
+                    data.doctors.forEach(doctor => {
+                        const col = document.createElement('div');
+                        col.classList.add('col-md-4');
+                        
+                        const card = document.createElement('div');
+                        card.classList.add('doctor-card');
+                        card.innerHTML = `
+                            <h5>${doctor.user__first_name} ${doctor.user__last_name}</h5>
+                            <p>Specialty: ${doctor.specialty}</p>
+                            <p>Location: ${doctor.location}</p>
+                            <p>Availability: ${doctor.is_available ? 'Available' : 'Not Available'}</p>
+                        `;
+                        col.appendChild(card);
+                        row.appendChild(col);
+                    });
+
+                    resultsContainer.appendChild(row);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
 </script>
+
 
 
 <!-- <div class="container-fluid">

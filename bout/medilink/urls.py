@@ -14,8 +14,7 @@ urlpatterns = [
     path('sent/', SentMessagesView.as_view(), name='sent_messages'),
     path('compose/', ComposeMessageView.as_view(), name='compose_message'),
     path('chat/', views.chat_view, name='chat'),
-    path('search-doctors/', home, name='search_doctors'),
-    path('home/', home, name='home'),
+    path('search_doctors/', home, name='search_doctors'),
 ]
 
 websocket_urlpatterns = [

@@ -51,7 +51,7 @@ class DoctorRegistrationForm(UserCreationForm):
 
 class PatientRegistrationForm(UserCreationForm):
     contact = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    date_of_birth = forms.DateField(widget=forms.SelectDateWidget(attrs={'class': 'form-control'}))
+    date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
     medical_history = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
     medications = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
 

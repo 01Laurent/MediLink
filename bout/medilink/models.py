@@ -6,6 +6,7 @@ from datetime import datetime, date
 from cryptography.fernet import Fernet
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from datetime import date
 
 User = get_user_model()
 
@@ -35,7 +36,7 @@ User.add_to_class(
 class PatientsProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = models.CharField(max_length=100)
-    date_of_birth = models.DateTimeField
+    date_of_birth = models.DateField()
     medical_history = models.TextField()
     medications = models.TextField()
 
