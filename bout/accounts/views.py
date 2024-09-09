@@ -28,6 +28,8 @@ class DoctorRegisterView(generic.CreateView):
 
     def form_valid(self, form):
         user = form.save()
+        login(self.request, user)
+        # Ensure the DoctorProfile is only created if it doesn't exist
         if not DoctorProfile.objects.filter(user=user).exists():
             DoctorProfile.objects.create(
                 user=user,
@@ -39,8 +41,8 @@ class DoctorRegisterView(generic.CreateView):
                 experience=form.cleaned_data['experience'],
                 clinics_worked=form.cleaned_data['clinics_worked']
             )
-            login(self.request, user)
-            return super().form_valid(form)
+        login(self.request, user)
+        return super().form_valid(form)
     
 class PatientRegisterView(generic.CreateView):
     model = User
@@ -58,8 +60,8 @@ class PatientRegisterView(generic.CreateView):
                 medical_history=form.cleaned_data['medical_history'],
                 medications=form.cleaned_data['medications']
             )
-            login(self.request, user)
-            return super().form_valid(form)
+        login(self.request, user)
+        return super().form_valid(form)
         
 class EditProfileView(generic.UpdateView):
     model = DoctorProfile
