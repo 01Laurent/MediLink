@@ -1,11 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
 {% if user.is_authenticated %}
-<h1>Welcome, Dr. {{ user.first_name }}!</h1>
-  <p>Patients Treated: {{ dashboard.patients_treated }}</p>
-  <p>Upcoming Appointments: {{ dashboard.upcoming_appointments }}</p>
-  <p>Total Earnings: ${{ dashboard.total_earnings }}</p>
-  <p>Notes: {{ dashboard.notes }}</p>
+<h1>Welcome, Dr. {{ user.first_name }}!</h1></br>
+<div class="row">
+  <div class="col-md-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ dashboard.patients_treated }}</h5>
+        <p class="card-text">Patients Treated</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ dashboard.upcoming_appointments }}</h5>
+        <p class="card-text">Upcoming Appointments</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">${{ dashboard.total_earnings }}</h5>
+        <p class="card-text">Total Earnings</p>
+      </div>
+    </div>
+  </div>
+  
   {% else %}
     <p><strong>You are nor allowed here and you know it!!!</strong></p>
   {% endif %}
@@ -14,4 +36,5 @@
   <li><a class="dropdown-item" href="{% url 'doctor_availability' %}">Doctor Availability</a></li>
   <li><a class="dropdown-item" href="{% url 'schedule_appointment' %}">Appointment Scheduling</a></li>
 
+  
 {% endblock %}

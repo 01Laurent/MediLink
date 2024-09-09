@@ -36,7 +36,7 @@ User.add_to_class(
 class PatientsProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = models.CharField(max_length=100)
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(null=True, blank=False)
     medical_history = models.TextField()
     medications = models.TextField()
 
