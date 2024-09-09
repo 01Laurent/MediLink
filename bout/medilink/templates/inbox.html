@@ -30,7 +30,25 @@
         console.error('Chat socket closed unexpectedly');
     };
 </script>
-<li><a class="dropdown-item" href="{% url 'sent_messages' %}">Sent</a></li>
-<li><a class="dropdown-item" href="{% url 'compose_message' %}">Send Message</a></li>
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'sent_messages' %}">
+            <i class="bi bi-send-check"></i>
+            Sent.
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'compose_message' %}">
+            <i class="bi bi-chat-left-text"></i>
+            Send Message.
+        </a>
+    </li>
+</ul>
+<!-- <li><a class="dropdown-item" href="{% url 'sent_messages' %}">Sent</a></li>
+<li><a class="dropdown-item" href="{% url 'compose_message' %}">Send Message</a></li> -->
 
 {% endblock %}
+
+
+For a sent message, you can use <i class="bi bi-send-check"></i>, and for a send message icon, you can use <i class="bi bi-chat-left-text"></i>

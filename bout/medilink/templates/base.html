@@ -103,7 +103,18 @@
                     </li>
                     {% if user.is_authenticated %}
                     {% if user.doctorprofile %}
-                        <li><a class="dropdown-item" href="{% url 'appointment_list' %}">Appointment List</a></li>
+                    <li class="nav-item"></li>
+                        <a class="nav-link" href="{% url 'doc_dashboard' %}">
+                            <i class="bi bi-speedometer2"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'appointment_list' %}">
+                            <i class="bi bi-hourglass-split"></i>
+                            Appointments
+                        </a>
+                    </li>
                         {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'inbox' %}">
