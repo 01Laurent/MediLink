@@ -60,41 +60,87 @@
         const formData = new FormData(this);
         const queryString = new URLSearchParams(formData).toString();
 
+        const resultsContainer = document.getElementById('results');
+        resultsContainer.innerHTML = '<p>Loading...</p>';
+
         fetch(`/search_doctors/?${queryString}`)
-            .then(response => response.json())
-            .then(data => {
-                const resultsContainer = document.getElementById('results');
-                resultsContainer.innerHTML = '';
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);  // Throw error if response status is not OK
+            }
+            return response.json();  // Parse JSON if the response is successful
+        })
+        .then(data => {
+            resultsContainer.innerHTML = '';  // Clear the loading message
 
-                if (data.doctors.length === 0) {
-                    resultsContainer.innerHTML = '<p>No doctors found matching your criteria.</p>';
-                } else {
-                    const row = document.createElement('div');
-                    row.classList.add('row');
+            if (!data.doctors || data.doctors.length === 0) {
+                resultsContainer.innerHTML = '<p>No doctors found matching your criteria.</p>';
+            } else {
+                const row = document.createElement('div');
+                row.classList.add('row');
+                
+                data.doctors.forEach(doctor => {
+                    const col = document.createElement('div');
+                    col.classList.add('col-md-4');
                     
-                    data.doctors.forEach(doctor => {
-                        const col = document.createElement('div');
-                        col.classList.add('col-md-4');
-                        
-                        const card = document.createElement('div');
-                        card.classList.add('doctor-card');
-                        card.innerHTML = `
-                            <h5>${doctor.user__first_name} ${doctor.user__last_name}</h5>
-                            <p>Specialty: ${doctor.specialty}</p>
-                            <p>Location: ${doctor.location}</p>
-                            <p>Availability: ${doctor.is_available ? 'Available' : 'Not Available'}</p>
-                        `;
-                        col.appendChild(card);
-                        row.appendChild(col);
-                    });
+                    const card = document.createElement('div');
+                    card.classList.add('doctor-card');
+                    card.innerHTML = `
+                        <h5>${doctor.user__first_name} ${doctor.user__last_name}</h5>
+                        <p>Specialty: ${doctor.specialty}</p>
+                        <p>Location: ${doctor.location}</p>
+                        <p>Availability: ${doctor.is_available ? 'Available' : 'Not Available'}</p>
+                        <a href="/request_appointment/${doctor.id}/" class="btn btn-info">Request</a>
+                    `;
+                    col.appendChild(card);
+                    row.appendChild(col);
+                });
 
-                    resultsContainer.appendChild(row);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    });
+                resultsContainer.appendChild(row);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            resultsContainer.innerHTML = `<p>An error occurred while fetching the results: ${error.message}</p>`;
+        });
+});
+
+    //     fetch(`/search_doctors/?${queryString}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             const resultsContainer = document.getElementById('results');
+    //             resultsContainer.innerHTML = '';
+
+    //             if (data.doctors.length === 0) {
+    //                 resultsContainer.innerHTML = '<p>No doctors found matching your criteria.</p>';
+    //             } else {
+    //                 const row = document.createElement('div');
+    //                 row.classList.add('row');
+                    
+    //                 data.doctors.forEach(doctor => {
+    //                     const col = document.createElement('div');
+    //                     col.classList.add('col-md-4');
+                        
+    //                     const card = document.createElement('div');
+    //                     card.classList.add('doctor-card');
+    //                     card.innerHTML = `
+    //                         <h5>${doctor.user__first_name} ${doctor.user__last_name}</h5>
+    //                         <p>Specialty: ${doctor.specialty}</p>
+    //                         <p>Location: ${doctor.location}</p>
+    //                         <p>Availability: ${doctor.is_available ? 'Available' : 'Not Available'}</p>
+    //                         <a href="/request_appointment/${doctor.id}/" class="btn btn-info">Request</a>
+    //                     `;
+    //                     col.appendChild(card);
+    //                     row.appendChild(col);
+    //                 });
+
+    //                 resultsContainer.appendChild(row);
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //         });
+    // });
 </script>
 
 

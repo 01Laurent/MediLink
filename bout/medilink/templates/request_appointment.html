@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Request an Appointment with Dr. {{ doctor.user.last_name }}</h2>
+<form method="POST" action="{% url 'request_appointment' doctor.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Request Appointment</button>
+</form>
+{% endblock %}

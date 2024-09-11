@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Manage Appointments</h2>
+
+{% if appointments %}
+    <ul>
+        {% for appointment in appointments %}
+            <li>
+                {{ appointment.patient.user.first_name }} {{ appointment.patient.user.last_name }} 
+                <a href="{% url 'set_appointment' appointment.id %}">Set Date & Time</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No pending appointments.</p>
+{% endif %}
+{% endblock %}

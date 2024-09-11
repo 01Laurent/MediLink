@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Your Appointments</h2>
+<ul>
+    {% for appointment in appointments %}
+        <li>Appointment with Dr. {{ appointment.doctor.last_name }} on {{ appointment.appointment_date }} 
+            - Status: {{ appointment.get_status_display }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+

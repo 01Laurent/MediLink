@@ -3,12 +3,14 @@ from django.db.models.query import QuerySet
 from django.forms import BaseModelForm
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_GET
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from medilink.models import DoctorsDash, PatientsProfile, Appointment, DoctorAvailability, Message, DoctorProfile
-from .forms import AppointmentForm, DoctorAvailabilityForm, MessageForm
+from .forms import AppointmentForm, DoctorAvailabilityForm, MessageForm, AppointmentRequestForm, SetAppointmentForm
+from django.contrib.auth.decorators import login_required
 
 
 def HomeView(request):
@@ -42,6 +44,77 @@ class PatDahView(LoginRequiredMixin, TemplateView):
                 
             }
         return context
+    
+@login_required
+def request_appointment(request, doctor_id):
+    doctor = get_object_or_404(DoctorProfile, id=doctor_id)
+
+    if request.method == 'POST':
+        appointment = Appointment.objects.create(
+            patient=PatientsProfile.objects.get(user=request.user),
+            doctor=doctor,
+            status='pending'
+        )
+        return redirect('appointment_confirmation')
+        # form = AppointmentRequestForm(request.POST)
+        # if form.is_valid():
+    #         appointment = form.save(commit=False)
+    #         appointment.patient = PatientsProfile.objects.get(user=request.user)
+    #         appointment.doctor = doctor
+    #         appointment.status = 'pending'
+    #         appointment.save()
+    #         return redirect('appointment_confirmation')
+    # else:
+    #         form = AppointmentRequestForm()
+
+    return render(request, 'request_appointment.html', {'doctor': doctor})
+    
+@login_required
+def manage_appointments(request):
+    if hasattr(request.user, 'doctorprofile'):
+        doctor = request.user.doctorprofile
+        appointments = Appointment.objects.filter(doctor=doctor, status='pending')
+
+        return render(request, 'manage_appointments.html', {'appointments': appointments})
+    return redirect('home')
+    # doctor_appointments = request.user.doctor_appointments.filter(status='pending')
+    # return render(request, 'manage_appointments.html', {'appointments' : doctor_appointments})
+
+@login_required
+def respond_to_appointment(request, appointment_id, response):
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+    if request.user !=appointment.doctor:
+        return redirect('home') # ntaeka message ya you are not a doctor
+    if response == 'accept':
+        appointment.accept()
+    elif response == 'reject':
+        appointment.reject()
+    return redirect('manage_appointments')
+
+@login_required
+def patient_appointments(request):
+    appointments = request.user.appointments.all()
+    return render(request, 'patient_appointments.html', {'appointments': appointments})
+
+@login_required
+def set_appointment(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+
+    if request.user != appointment.doctor.user:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form = SetAppointmentForm(request.POST, instance=appointment)
+        if form.is_valid():
+            appointment.status = 'confirmed'
+            form.save()
+            return redirect(manage_appointments)
+    else:
+        form = SetAppointmentForm(instance=appointment)
+    return render(request, 'set_appointment.html', {'form': form, 'appointment': appointment})
+
+def appointment_confirmation(request):
+    return render(request, 'appointment_confirmation.html')
     
 class ScheduleAppointmentView(CreateView):
     model = Appointment
@@ -126,5 +199,5 @@ def home(request):
         doctors = doctors.filter(is_available=True)
     elif availability == 'not_available':
         doctors = doctors.filter(is_available=False)
-    results = list(doctors.values('user__first_name', 'user__last_name', 'specialty', 'location', 'is_available'))
+    results = list(doctors.values('id', 'user__first_name', 'user__last_name', 'specialty', 'location', 'is_available'))
     return JsonResponse({'doctors': results})

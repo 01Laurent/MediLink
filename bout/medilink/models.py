@@ -79,15 +79,23 @@ class Appointment(models.Model):
         ('rejected', 'Rejected'),
     ]
 
-    patient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments')
-    doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor_appointments')
-    appointment_date = models.DateField()
-    appointment_time = models.TimeField()
+    patient = models.ForeignKey(PatientsProfile, on_delete=models.CASCADE, related_name='appointments')
+    doctor = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE, related_name='doctor_appointments')
+    appointment_date = models.DateField(null=True, blank=True)
+    appointment_time = models.TimeField(null=True, blank=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Appointment with Dr. {self.doctor} on {self.appointment_date} at {self.appointment_time}"
+        return f"Appointment with Dr. {self.doctor.user.last_name} on {self.appointment_date}"
+    def accept(self):
+        self.status = 'accepted'
+        self.save()
+    def reject(self):
+        self.status = 'rejected'
+        self.save()
     
 class Message(models.Model):
     sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Appointment, DoctorAvailability, Message, User
+from .models import Appointment, DoctorAvailability, Message
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -15,6 +15,18 @@ class AppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
         fields = ['doctor', 'appointment_date', 'appointment_time', 'notes']
+
+class AppointmentRequestForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = []
+class SetAppointmentForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ['appointment_date', 'appointment_time']
+        widgets = {
+            
+        }
 
 class DoctorAvailabilityForm(forms.ModelForm):
     day = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
