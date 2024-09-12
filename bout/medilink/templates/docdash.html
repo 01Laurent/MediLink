@@ -35,5 +35,43 @@
   <li><a class="dropdown-item" href="{% url 'appointment_list' %}">Appointment List</a></li>
   <li><a class="dropdown-item" href="{% url 'doctor_availability' %}">Doctor Availability</a></li>
   <li><a class="dropdown-item" href="{% url 'schedule_appointment' %}">Appointment Scheduling</a></li>
-  
-{% endblock %}
+  <br/> <br/>
+  <h3>All Appointment Requests</h3>
+<br/>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for appointment in appointments %}
+        <tr>
+            <td>{{ appointment.patient.user.get_full_name }}</td> <!-- Patient's full name -->
+            <td>{{ appointment.appointment_date }}</td>
+            <td>{{ appointment.appointment_time }}</td>
+            <td>{{ appointment.get_status_display }}</td> <!-- Human-readable status (pending, accepted, rejected) -->
+            <td>
+                {% if appointment.status == 'pending' %}
+                    <!-- Show actions for pending appointments only -->
+                    <a href="{% url 'respond_to_appointment' appointment.id 'accept' %}" class="btn btn-success">Accept</a>
+                    <a href="{% url 'respond_to_appointment' appointment.id 'reject' %}" class="btn btn-danger">Reject</a>
+                {% else %}
+                    <!-- Show status if already accepted/rejected -->
+                    <span class="text-muted">{{ appointment.get_status_display }}</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No appointments found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+  {% endblock %}

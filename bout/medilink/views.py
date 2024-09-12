@@ -30,6 +30,8 @@ class DocDashView(LoginRequiredMixin, TemplateView):
                 'total_earnings': profile.total_earnings,
                 'notes': profile.notes,
             }
+            context['appointments'] = Appointment.objects.filter(doctor=profile)
+
         return context
 
 class PatDahView(LoginRequiredMixin, TemplateView):
@@ -73,23 +75,21 @@ def request_appointment(request, doctor_id):
 def manage_appointments(request):
     if hasattr(request.user, 'doctorprofile'):
         doctor = request.user.doctorprofile
-        appointments = Appointment.objects.filter(doctor=doctor, status='pending')
+        appointments = Appointment.objects.filter(doctor=doctor)
 
-        return render(request, 'manage_appointments.html', {'appointments': appointments})
+        return render(request, 'docdash.html', {'appointments': appointments})
     return redirect('home')
-    # doctor_appointments = request.user.doctor_appointments.filter(status='pending')
-    # return render(request, 'manage_appointments.html', {'appointments' : doctor_appointments})
 
 @login_required
 def respond_to_appointment(request, appointment_id, response):
     appointment = get_object_or_404(Appointment, id=appointment_id)
-    if request.user !=appointment.doctor:
+    if request.user !=appointment.doctor.user:
         return redirect('home') # ntaeka message ya you are not a doctor
     if response == 'accept':
         appointment.accept()
     elif response == 'reject':
         appointment.reject()
-    return redirect('manage_appointments')
+    return redirect('doc_dashboard')
 
 @login_required
 def patient_appointments(request):
