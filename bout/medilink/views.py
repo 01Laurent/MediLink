@@ -86,10 +86,19 @@ def respond_to_appointment(request, appointment_id, response):
     if request.user !=appointment.doctor.user:
         return redirect('home') # ntaeka message ya you are not a doctor
     if response == 'accept':
-        appointment.accept()
+        if request.method == 'POST':
+            form = SetAppointmentForm(request.POST, instance=appointment)
+            if form.is_valid():
+                appointment = form.save(commit=False)
+                appointment.status = 'accepted'
+                appointment.save()
+                return redirect('doc_dashboard')
+        else:
+            form = SetAppointmentForm(instance=appointment)
+        return render(request, 'set_appointment.html', {'form': form, 'appointment': appointment})
     elif response == 'reject':
         appointment.reject()
-    return redirect('doc_dashboard')
+        return redirect('doc_dashboard')
 
 @login_required
 def patient_appointments(request):

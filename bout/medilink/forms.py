@@ -21,13 +21,12 @@ class AppointmentRequestForm(forms.ModelForm):
         model = Appointment
         fields = []
 class SetAppointmentForm(forms.ModelForm):
+    appointment_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+    appointment_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     class Meta:
         model = Appointment
         fields = ['appointment_date', 'appointment_time']
-        widgets = {
-            
-        }
-
+        
 class DoctorAvailabilityForm(forms.ModelForm):
     day = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
     start_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}))
