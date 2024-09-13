@@ -26,6 +26,24 @@ class SetAppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
         fields = ['appointment_date', 'appointment_time']
+
+class FeedbackForm(forms.Form):
+    TREATED_CHOICES = [(True, 'Treated'), (False, 'Not Treated')]
+    
+    is_treated = forms.ChoiceField(choices=TREATED_CHOICES, widget=forms.RadioSelect)
+    rating = forms.IntegerField(min_value=1, max_value=5, required=False, help_text='Rate the doctor (1-5 stars)')
+    not_treated_reason = forms.CharField(widget=forms.Textarea, required=False, help_text='Reason for not being treated')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        is_treated = cleaned_data.get('is_treated')
+        rating = cleaned_data.get('rating')
+        not_treated_reason = cleaned_data.get('not_treated_reason')
+
+        if is_treated == 'True' and not rating:
+            raise forms.ValidationError("Please provide a rating if you were treated.")
+        if is_treated == 'False' and not not_treated_reason:
+            raise forms.ValidationError("Please provide a reason if you were not treated.")
         
 class DoctorAvailabilityForm(forms.ModelForm):
     day = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))

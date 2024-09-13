@@ -40,12 +40,14 @@ class PatDahView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
+
         if hasattr(user, 'patientsprofile'):
             profile = user.patientsprofile
 
-            appointments = Appointment.objects.filter(patient=profile).order_by('-created_at')
+            # appointments = Appointment.objects.filter(patient=profile).order_by('-created_at')
 
-            context['dashboard'] = {'appointments': appointments}
+            # context['dashboard'] = {'appointments': appointments}
+            context['appointments'] = Appointment.objects.filter(patient=profile)
         return context
     
 @login_required
@@ -107,25 +109,27 @@ def patient_appointments(request):
     appointments = request.user.appointments.all()
     return render(request, 'patient_appointments.html', {'appointments': appointments})
 
-@login_required
-def set_appointment(request, appointment_id):
-    appointment = get_object_or_404(Appointment, id=appointment_id)
-
-    if request.user != appointment.doctor.user:
-        return redirect('home')
-    
-    if request.method == 'POST':
-        form = SetAppointmentForm(request.POST, instance=appointment)
-        if form.is_valid():
-            appointment.status = 'confirmed'
-            form.save()
-            return redirect(manage_appointments)
-    else:
-        form = SetAppointmentForm(instance=appointment)
-    return render(request, 'set_appointment.html', {'form': form, 'appointment': appointment})
-
 def appointment_confirmation(request):
     return render(request, 'appointment_confirmation.html')
+
+def update_appointment(request):
+    if request.method == 'POST':
+        appointment_id = request.POST.get('appointment_id')
+        appointment = get_object_or_404(Appointment, id=appointment_id)
+        
+        if 'rating' in request.POST:
+            appointment.is_treated = True
+            appointment.rating = int(request.POST.get('rating'))
+            appointment.save()
+        
+        if 'not_treated_reason' in request.POST:
+            appointment.is_not_treated = True
+            appointment.not_treated_reason = request.POST.get('not_treated_reason')
+            appointment.save()
+
+        return redirect('pat_dashboard')
+    return redirect('pat_dashboard')
+
     
 class ScheduleAppointmentView(CreateView):
     model = Appointment

@@ -1,6 +1,6 @@
 from django.urls import path
 from .import consumers
-from .views import DocDashView, PatDahView, ScheduleAppointmentView, DoctorAvailabilityView, AppointmentListView,ComposeMessageView, SentMessagesView, InboxView, home, HomeView, request_appointment, appointment_confirmation
+from .views import DocDashView, PatDahView, ScheduleAppointmentView, DoctorAvailabilityView, AppointmentListView,ComposeMessageView, SentMessagesView, InboxView, home, HomeView, request_appointment, appointment_confirmation, update_appointment
 from .import views
 
 urlpatterns = [
@@ -20,6 +20,7 @@ urlpatterns = [
     path('manage_appointments/', views.manage_appointments, name='manage_appointments'),
     path('respond_to_appointment/<int:appointment_id>/<str:response>/', views.respond_to_appointment, name='respond_to_appointment'),
     path('patient_appointments/', views.patient_appointments, name='patient_appointments'),
+    path('appointments/update/', update_appointment, name='update_appointment'),
 ]
 
 websocket_urlpatterns = [

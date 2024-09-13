@@ -7,6 +7,7 @@ from cryptography.fernet import Fernet
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from datetime import date
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 User = get_user_model()
 
@@ -87,6 +88,10 @@ class Appointment(models.Model):
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_treated = models.BooleanField(default=False)
+    is_not_treated = models.BooleanField(default=False)
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=True, blank=True)
+    not_treated_reason = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f"Appointment with Dr. {self.doctor.user.last_name} on {self.appointment_date}"

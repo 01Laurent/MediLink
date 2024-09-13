@@ -1,33 +1,152 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <h1>Welcome, {{ user.first_name }}!</h1>
 
-<h3>Your Appointments</h3>
-<table class="table">
-    <thead>
-        <tr>
+<div class="container">
+    <h2>Your Appointments</h2>
+
+    {% if appointments %}
+      <table class="table">
+        <thead>
+          <tr>
             <th>Doctor</th>
-            <th>Requested Date</th>
-            <th>Scheduled Date</th>
-            <th>Scheduled Time</th>
+            <th>Date</th>
+            <th>Time</th>
             <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for appointment in dashboard.appointments %}
-        <tr>
-            <td>Dr. {{ appointment.doctor.user.get_full_name }}</td>
-            <td>{{ appointment.created_at|date:"F d, Y" }}</td>
-            <td>{{ appointment.appointment_date|default:"Not set" }}</td> <!-- Show 'Not set' if no date is set -->
-            <td>{{ appointment.appointment_time|default:"Not set" }}</td> <!-- Show 'Not set' if no time is set -->
-            <td>{{ appointment.get_status_display }}</td> <!-- Human-readable status -->
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4">No appointments found.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for appointment in appointments %}
+            <tr>
+              <td>Dr.{{ appointment.doctor.user.first_name }}</td>
+              <td>{{ appointment.appointment_date }}</td>
+              <td>{{ appointment.appointment_time }}</td>
+              <td>{{ appointment.status }}</td>
+              <td>
+                {% if not appointment.is_treated and not appointment.is_not_treated %}
+                  <button class="btn btn-success" onclick="showRatingForm('{{ appointment.id }}')">Treated</button>
+                  <button class="btn btn-danger" onclick="showReasonForm('{{ appointment.id }}')">Not Treated</button>
+                {% elif appointment.is_treated %}
+                  <p>Rated: {{ appointment.rating }} stars</p>
+                {% elif appointment.is_not_treated %}
+                  <p>Reason for not being treated: {{ appointment.not_treated_reason }}</p>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>You have no appointments.</p>
+    {% endif %}
+</div>
+
+<!-- Rating Form Modal -->
+<div id="ratingModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('ratingModal')">&times;</span>
+    <h2>Rate Your Doctor</h2>
+    <form id="ratingForm" method="POST" action="{% url 'update_appointment' %}">
+      {% csrf_token %}
+      <input type="hidden" name="appointment_id" id="ratingAppointmentId">
+      <div class="form-group">
+        <label for="rating">Rating:</label>
+        <select name="rating" id="rating" class="form-control"></select>
+      </div>
+      <button type="submit" class="btn btn-success">Submit Rating</button>
+    </form>
+  </div>
+</div>
+
+<!-- Reason Form Modal -->
+<div id="reasonModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('reasonModal')">&times;</span>
+    <h2>Provide Reason for Not Being Treated</h2>
+    <form id="reasonForm" method="POST" action="{% url 'update_appointment' %}">
+      {% csrf_token %}
+      <input type="hidden" name="appointment_id" id="reasonAppointmentId">
+      <div class="form-group">
+        <label for="not_treated_reason">Reason:</label>
+        <textarea name="not_treated_reason" id="not_treated_reason" class="form-control"></textarea>
+      </div>
+      <button type="submit" class="btn btn-danger">Submit Reason</button>
+    </form>
+  </div>
+</div>
+
+<style>
+  /* Modal styles */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  function showRatingForm(appointmentId) {
+    document.getElementById('ratingAppointmentId').value = appointmentId;
+    populateRatingOptions();
+    document.getElementById('ratingModal').style.display = 'block';
+  }
+
+  function showReasonForm(appointmentId) {
+    document.getElementById('reasonAppointmentId').value = appointmentId;
+    document.getElementById('reasonModal').style.display = 'block';
+  }
+
+  function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+  }
+
+  function populateRatingOptions() {
+    var ratingSelect = document.getElementById('rating');
+    ratingSelect.innerHTML = ''; // Clear previous options
+    for (var i = 1; i <= 5; i++) {
+      var option = document.createElement('option');
+      option.value = i;
+      option.textContent = i;
+      ratingSelect.appendChild(option);
+    }
+  }
+
+  window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+      closeModal(event.target.id);
+    }
+  }
+</script>
 
 {% endblock %}
