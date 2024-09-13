@@ -2,5 +2,32 @@
 {% block content %}
 <h1>Welcome, {{ user.first_name }}!</h1>
 
+<h3>Your Appointments</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Doctor</th>
+            <th>Requested Date</th>
+            <th>Scheduled Date</th>
+            <th>Scheduled Time</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for appointment in dashboard.appointments %}
+        <tr>
+            <td>Dr. {{ appointment.doctor.user.get_full_name }}</td>
+            <td>{{ appointment.created_at|date:"F d, Y" }}</td>
+            <td>{{ appointment.appointment_date|default:"Not set" }}</td> <!-- Show 'Not set' if no date is set -->
+            <td>{{ appointment.appointment_time|default:"Not set" }}</td> <!-- Show 'Not set' if no time is set -->
+            <td>{{ appointment.get_status_display }}</td> <!-- Human-readable status -->
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No appointments found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}

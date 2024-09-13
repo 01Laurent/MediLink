@@ -42,9 +42,10 @@ class PatDahView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         if hasattr(user, 'patientsprofile'):
             profile = user.patientsprofile
-            context['dashboard'] = {
-                
-            }
+
+            appointments = Appointment.objects.filter(patient=profile).order_by('-created_at')
+
+            context['dashboard'] = {'appointments': appointments}
         return context
     
 @login_required
@@ -55,7 +56,8 @@ def request_appointment(request, doctor_id):
         appointment = Appointment.objects.create(
             patient=PatientsProfile.objects.get(user=request.user),
             doctor=doctor,
-            status='pending'
+            status='pending',
+            # created_at = timezone.now()
         )
         return redirect('appointment_confirmation')
         # form = AppointmentRequestForm(request.POST)
