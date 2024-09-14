@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from medilink.models import DoctorProfile, PatientsProfile
 
 
@@ -40,21 +40,17 @@ class DoctorRegistrationForm(UserCreationForm):
             user.save()  # Only save the user
         return user
 
-    # def save(self, commit=True):
-    #     user = super().save(commit=False)
-    #     user.is_staff = True  # Assuming doctors are staff members
-    #     if commit:
-    #         user.save()
-    #         DoctorProfile.objects.create(user=user,
-    #                                     contact=self.cleaned_data['contact'], 
-    #                                     specialty=self.cleaned_data['specialty'],
-    #                                     location=self.cleaned_data['location'],
-    #                                     license_number=self.cleaned_data['license_number'], 
-    #                                     education=self.cleaned_data['education'],
-    #                                     experience=self.cleaned_data['experience'], 
-    #                                     clinics_worked=self.cleaned_data['clinics_worked'],
-    #                                     )
-    #     return user
+class DoctorEditForm(UserChangeForm):
+    contact = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    specialty = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    location = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    education = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    experience = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    clinics_worked = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = DoctorProfile
+        fields = ['contact', 'specialty', 'location', 'education', 'experience', 'clinics_worked']
 
 class PatientRegistrationForm(UserCreationForm):
     contact = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -73,12 +69,3 @@ class PatientRegistrationForm(UserCreationForm):
             user.save() 
         return user
 
-    # def save(self, commit=True):
-    #     user = super().save(commit=False)
-    #     if commit:
-    #         user.save()
-    #         PatientsProfile.objects.create(user=user, contact=self.cleaned_data['contact'], 
-    #                                        date_of_birth=self.cleaned_data['date_of_birth'], 
-    #                                        medical_history=self.cleaned_data['medical_history'], 
-    #                                        medications=self.cleaned_data['medications'])
-    #     return user

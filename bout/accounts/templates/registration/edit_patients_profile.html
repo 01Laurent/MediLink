@@ -4,7 +4,7 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-    {% if user.id == doctor.user.id %}
+    {% if user.id == patientsprofile.user.id %}
         <h1> Edit Profile </h1>
         <br/><br/>
         <div class="form-group">
@@ -22,4 +22,4 @@
 {% endif %}
 
 {% endblock %}
-                                                                        
+                                                                            
