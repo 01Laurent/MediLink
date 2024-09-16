@@ -1,6 +1,6 @@
 from django.urls import path
 from .import consumers
-from .views import DocDashView, PatDahView, ScheduleAppointmentView, DoctorAvailabilityView, AppointmentListView,ComposeMessageView, SentMessagesView, InboxView, home, HomeView, request_appointment, appointment_confirmation, update_appointment
+from .views import DocDashView, PatDahView, ScheduleAppointmentView,AppointmentListView,ComposeMessageView, SentMessagesView, InboxView, home, HomeView, request_appointment, appointment_confirmation, update_appointment, notifications_view
 from .import views
 
 urlpatterns = [
@@ -8,7 +8,6 @@ urlpatterns = [
     path('doctors/dashboard', DocDashView.as_view(), name='doc_dashboard'),
     path('patients/dashboard', PatDahView.as_view(), name='pat_dashboard'),
     path('schedule/', ScheduleAppointmentView.as_view(), name='schedule_appointment'),
-    path('availability/', DoctorAvailabilityView.as_view(), name='doctor_availability'),
     path('appointments/', AppointmentListView.as_view(), name='appointment_list'),
     path('inbox/', InboxView.as_view(), name='inbox'),
     path('sent/', SentMessagesView.as_view(), name='sent_messages'),
@@ -21,6 +20,7 @@ urlpatterns = [
     path('respond_to_appointment/<int:appointment_id>/<str:response>/', views.respond_to_appointment, name='respond_to_appointment'),
     path('patient_appointments/', views.patient_appointments, name='patient_appointments'),
     path('appointments/update/', update_appointment, name='update_appointment'),
+    path('notifications/', notifications_view, name='notifications'),
 ]
 
 websocket_urlpatterns = [

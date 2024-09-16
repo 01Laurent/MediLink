@@ -40,17 +40,21 @@ class DoctorRegistrationForm(UserCreationForm):
             user.save()  # Only save the user
         return user
 
-class DoctorEditForm(UserChangeForm):
-    contact = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    specialty = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    location = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    education = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    experience = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    clinics_worked = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
-
+class DoctorEditForm(forms.ModelForm):
     class Meta:
         model = DoctorProfile
-        fields = ['contact', 'specialty', 'location', 'education', 'experience', 'clinics_worked']
+        fields = ['contact', 'specialty', 'location', 'is_available', 'education', 'experience', 'clinics_worked']
+        
+        # Add custom widgets to each field
+        widgets = {
+            'contact': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Contact Information'}),
+            'specialty': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Specialty'}),
+            'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Location'}),
+            # 'is_available': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'education': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Education Background'}),
+            'experience': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Experience Details'}),
+            'clinics_worked': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Clinics Worked'}),
+        }
 
 class PatientRegistrationForm(UserCreationForm):
     contact = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -68,4 +72,17 @@ class PatientRegistrationForm(UserCreationForm):
         if commit:
             user.save() 
         return user
+    
+class PatientEditForm(forms.ModelForm):
+    class Meta:
+        model = PatientsProfile
+        fields = ['contact', 'date_of_birth', 'medical_history', 'medications']
+        
+        # Add custom widgets to each field
+        widgets = {
+            'contact': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Contact Information'}),
+            'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'medical_history': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Medical History'}),
+            'medications': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Current Medications'}),
+        }
 

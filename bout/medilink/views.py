@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from medilink.models import DoctorsDash, PatientsProfile, Appointment, DoctorAvailability, Message, DoctorProfile
+from medilink.models import DoctorsDash, PatientsProfile, Appointment, DoctorAvailability, Message, DoctorProfile, Notification
 from .forms import AppointmentForm, DoctorAvailabilityForm, MessageForm, AppointmentRequestForm, SetAppointmentForm
 from django.contrib.auth.decorators import login_required
 
@@ -61,6 +61,10 @@ def request_appointment(request, doctor_id):
             status='pending',
             # created_at = timezone.now()
         )
+        Notification.objects.create(
+            recipient=doctor.user,
+            message=f"New appointment request from {request.user.first_name} {request.user.last_name}"
+        )
         return redirect('appointment_confirmation')
         # form = AppointmentRequestForm(request.POST)
         # if form.is_valid():
@@ -96,12 +100,21 @@ def respond_to_appointment(request, appointment_id, response):
                 appointment = form.save(commit=False)
                 appointment.status = 'accepted'
                 appointment.save()
+
+                Notification.objects.create(
+                    recipient=appointment.patient.user,
+                    message=f"Your appointment with Dr. {appointment.doctor.user.last_name} has been accepted."
+                )
                 return redirect('doc_dashboard')
         else:
             form = SetAppointmentForm(instance=appointment)
         return render(request, 'set_appointment.html', {'form': form, 'appointment': appointment})
     elif response == 'reject':
         appointment.reject()
+        Notification.objects.create(
+            recipient=appointment.patient.user,
+            message=f"Your appointment with Dr. {appointment.doctor.user.last_name} has been rejected."
+        )
         return redirect('doc_dashboard')
 
 @login_required
@@ -130,6 +143,18 @@ def update_appointment(request):
         return redirect('pat_dashboard')
     return redirect('pat_dashboard')
 
+@login_required
+def notifications_view(request):
+    notifications = Notification.objects.filter(recipient=request.user, is_read=False)
+    return render(request, 'notifications.html', {'notifications': notifications})
+
+@login_required
+def mark_notification_as_read(request, notification_id):
+    notification = Notification.objects.get(id=notification_id, recipient=request.user)
+    notification.is_read = True
+    notification.save()
+    return redirect('notifications_view')
+
     
 class ScheduleAppointmentView(CreateView):
     model = Appointment
@@ -139,16 +164,6 @@ class ScheduleAppointmentView(CreateView):
 
     def form_valid(self, form):
         form.instance.patient = self.request.user
-        return super().form_valid(form)
-    
-class DoctorAvailabilityView(CreateView):
-    model = DoctorAvailability
-    form_class = DoctorAvailabilityForm
-    template_name = 'doctor_availability.html'
-    success_url = reverse_lazy('doc_dashboard')
-
-    def form_valid(self, form):
-        form.instance.doctor = self.request.user
         return super().form_valid(form)
     
 class AppointmentListView(ListView):

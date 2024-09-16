@@ -2,7 +2,7 @@ from django.forms import BaseModelForm
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
-from .forms import DoctorRegistrationForm, PatientRegistrationForm, DoctorEditForm
+from .forms import DoctorRegistrationForm, PatientRegistrationForm, DoctorEditForm, PatientEditForm
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -65,9 +65,9 @@ class PatientRegisterView(generic.CreateView):
         
 class EditDoctorsProfileView(generic.UpdateView):
     model = DoctorProfile
-    # form_class = DoctorEditForm
+    form_class = DoctorEditForm
     template_name = ('registration/edit_doctors_profile_page.html')
-    fields = ['contact', 'specialty', 'location', 'is_available', 'education', 'experience', 'clinics_worked']
+    # fields = ['contact', 'specialty', 'location', 'is_available', 'education', 'experience', 'clinics_worked']
     success_url = reverse_lazy('doc_dashboard')
 
     # def get_object(self):
@@ -75,7 +75,8 @@ class EditDoctorsProfileView(generic.UpdateView):
 
 class EditPatientsView(generic.UpdateView):
     model = PatientsProfile
+    form_class = PatientEditForm
     template_name = ('registration/edit_patients_profile.html')
-    fields = ['contact', 'form_class = DoctorEditFormdate_of_birth', 'medical_history', 'medications']
+    # fields = ['contact', 'form_class = DoctorEditFormdate_of_birth', 'medical_history', 'medications']
     success_url = reverse_lazy('home')
  

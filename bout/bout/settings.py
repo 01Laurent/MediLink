@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from celery.schedules import crontab
+CELERY_BEAT_SCHEDULE = {
+    'send-appointment-reminders-daily': {
+        'task': 'your_app.tasks.send_appointment_reminders',
+        'schedule': crontab(hour=9, minute=0),  # Runs every day at 9 AM
+    },
+}
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -130,3 +137,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/accounts/login'
 LOGOUT_REDIRECT_URL = '/'
 ENCRYPTION_KEY = '_qo9GBCYIp5S9-CkZRRPQisGzCDWd_0cFGiirYgqjJ8='
+
+# Celery settings
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # The URL to your Redis instance
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # Use Redis as the result backend too
+CELERY_ACCEPT_CONTENT = ['json']  # Accept only JSON-serialized content
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'  # Ensure this matches your project's timezone
