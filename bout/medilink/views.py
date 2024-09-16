@@ -146,7 +146,11 @@ def update_appointment(request):
 @login_required
 def notifications_view(request):
     notifications = Notification.objects.filter(recipient=request.user, is_read=False)
-    return render(request, 'notifications.html', {'notifications': notifications})
+    unread_count = notifications.count()
+    return render(request, 'notifications.html', {
+        'notifications': notifications,
+        'unread_count': unread_count
+    })
 
 @login_required
 def mark_notification_as_read(request, notification_id):

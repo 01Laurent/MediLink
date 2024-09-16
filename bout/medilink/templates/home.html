@@ -2,35 +2,47 @@
 {% load static %}
 {% block content %}
 
-<h1 style="font-family:'Courier New', Courier, monospace; font-size: 4rem; text-align: center; color: red;">
-    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-heart-pulse" viewBox="0 0 16 16">
-        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053.918 3.995.78 5.323 1.508 7H.43c-2.128-5.697 4.165-8.83 7.394-5.857q.09.083.176.171a3 3 0 0 1 .176-.17c3.23-2.974 9.522.159 7.394 5.856h-1.078c.728-1.677.59-3.005.108-3.947C13.486.878 10.4.28 8.717 2.01zM2.212 10h1.315C4.593 11.183 6.05 12.458 8 13.795c1.949-1.337 3.407-2.612 4.473-3.795h1.315c-1.265 1.566-3.14 3.25-5.788 5-2.648-1.75-4.523-3.434-5.788-5"/>
-        <path d="M10.464 3.314a.5.5 0 0 0-.945.049L7.921 8.956 6.464 5.314a.5.5 0 0 0-.88-.091L3.732 8H.5a.5.5 0 0 0 0 1H4a.5.5 0 0 0 .416-.223l1.473-2.209 1.647 4.118a.5.5 0 0 0 .945-.049l1.598-5.593 1.457 3.642A.5.5 0 0 0 12 9h3.5a.5.5 0 0 0 0-1h-3.162z"/>
-      </svg>
-    <strong>MediLink</strong>
-</h1>
+<div class="container mt-5">
+    <!-- MediLink Title with Icon -->
+    <div class="text-center mb-4">
+        <h1 class="display-4 text-danger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-heart-pulse" viewBox="0 0 16 16">
+                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053.918 3.995.78 5.323 1.508 7H.43c-2.128-5.697 4.165-8.83 7.394-5.857q.09.083.176.171a3 3 0 0 1 .176-.17c3.23-2.974 9.522.159 7.394 5.856h-1.078c.728-1.677.59-3.005.108-3.947C13.486.878 10.4.28 8.717 2.01zM2.212 10h1.315C4.593 11.183 6.05 12.458 8 13.795c1.949-1.337 3.407-2.612 4.473-3.795h1.315c-1.265 1.566-3.14 3.25-5.788 5-2.648-1.75-4.523-3.434-5.788-5"/>
+                <path d="M10.464 3.314a.5.5 0 0 0-.945.049L7.921 8.956 6.464 5.314a.5.5 0 0 0-.88-.091L3.732 8H.5a.5.5 0 0 0 0 1H4a.5.5 0 0 0 .416-.223l1.473-2.209 1.647 4.118a.5.5 0 0 0 .945-.049l1.598-5.593 1.457 3.642A.5.5 0 0 0 12 9h3.5a.5.5 0 0 0 0-1h-3.162z"/>
+            </svg>
+            <strong>MediLink</strong>
+        </h1>
+        <p class="lead">Your trusted place to connect with healthcare professionals.</p>
+    </div>
 
-<br/>
-<h2 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; text-align: center;">
-    Welcome to MediLink, your trusted place to connect with healthcare professionals.
-</h2>
+    <!-- Search for Professionals -->
+    <div class="card shadow-sm mb-5">
+        <div class="card-body">
+            <h4 class="card-title text-center">Search for Professionals</h4>
+            <form id="searchForm" class="row g-3 justify-content-center">
+                <div class="col-md-3">
+                    <input class="form-control" type="text" name="specialty" placeholder="Specialty">
+                </div>
+                <div class="col-md-3">
+                    <input class="form-control" type="text" name="location" placeholder="Location">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="availability">
+                        <option value="">Availability</option>
+                        <option value="available">Available</option>
+                        <option value="not_available">Not Available</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-success w-100" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-<br/> 
+    <!-- Results Section -->
+    <div id="results" class="mt-4"></div>
 
-<div class="container-fluid" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 5px;"><br/>
-    <h4 style="text-align: center;">Search for Professionals.</h4>
-    <form id="searchForm" class="d-flex justify-content-center">
-        <input class="form-control me-2" type="text" name="specialty" placeholder="Specialty" aria-label="Speciality">
-        <input class="form-control me-2" type="text" name="location" placeholder="Location" aria-label="Location">
-        <select class="form-control me-2" name="availability">
-            <option value="">Availability</option>
-            <option value="available">Available</option>
-            <option value="not_available">Not Available</option>
-        </select>
-        <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
-    <div id="results" class="mt-4"></div><br/>
-</div>
 
 <style>
     #results {
@@ -179,16 +191,26 @@
         </div>
     {% endif %}
 </div> -->
-<br/> <br/>
-<div class="container" style="justify-content: center; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 5px;"> </br>
-    <p style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-size: 2rem;">
-        This is where all doctors and patients Connect.
+<br/>
+<div class="card shadow-sm p-4 text-center">
+    <p class="fs-4">
+        This is where all doctors and patients connect.
     </p>
-
-    Are you a Doctor?, seeking to help patients register here - <a href="{% url 'doctor_register' %}" class="btn btn-info">Doctor Register</a> <br/><br/>
-    Are you a Patient?, seeking consultation? register here - <a href="{% url 'patient_register' %}"class="btn btn-info">Patient Register</a> <br/> <br/>
-    Already have an account? - <a href="{% url 'login' %}"class="btn btn-info">Login</a>
-    <br/> <br/>
+    <div class="d-grid gap-2 col-md-6 mx-auto">
+        <p>
+            Are you a Doctor seeking to help patients? 
+            <a href="{% url 'doctor_register' %}" class="btn btn-info btn-lg">Doctor Register</a>
+        </p>
+        <p>
+            Are you a Patient seeking consultation? 
+            <a href="{% url 'patient_register' %}" class="btn btn-info btn-lg">Patient Register</a>
+        </p>
+        <p>
+            Already have an account? 
+            <a href="{% url 'login' %}" class="btn btn-info btn-lg">Login</a>
+        </p>
+    </div>
+</div>
 </div>
 
 

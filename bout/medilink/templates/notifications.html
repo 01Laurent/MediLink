@@ -1,21 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Notifications for {{ user.username }}</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Notifications</h1>
+    <h2 class="mb-4">{{ user.first_name }}</h2>
 
     {% if notifications %}
-        <ul>
+        <div class="list-group">
             {% for notification in notifications %}
-                <li>
-                    <p><strong>Message:</strong> {{ notification.message }}</p>
-                    <p><strong>Date:</strong> {{ notification.created_at }}</p>
+                <div class="list-group-item d-flex justify-content-between align-items-start shadow-sm mb-2">
+                    <div>
+                        <p class="mb-1"><strong>Message:</strong> {{ notification.message }}</p>
+                        <p class="mb-0"><strong>Date:</strong> {{ notification.created_at }}</p>
+                    </div>
                     {% if not notification.is_read %}
-                        <a href="#">Mark as read</a>
+                        <a href="#" class="btn btn-outline-primary btn-sm">Mark as read</a>
                     {% endif %}
-                </li>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     {% else %}
-        <p>You have no notifications.</p>
+        <div class="alert alert-info" role="alert">
+            You have no notifications.
+        </div>
     {% endif %}
+</div>
 {% endblock %}
