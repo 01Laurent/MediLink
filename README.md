@@ -8,3 +8,9 @@ A Web app that connects Patients to Doctors, and also uses trending features lik
     - I decided to work on a virtual consultation app that will allow doctors and patients to consult virtually without having to go to the hospitals where they go and queue for hours and maybe also not get treated.
     - The app allows patients to request for appointments from the doctor of their choice and when doctors accept the appointments they set the date and time they want to meeet the patient, the doctor can also reject an appointment and refer the patient to another doctor.
 
+To run the application▶️
+   - Git clone
+   - Activate the virtual env(source venv/Scripts/activate)
+   - cd to the project(bout)
+   - Run the virtual enviroment(python manage.py runserver)
+   - You'll now be able to use the app.
