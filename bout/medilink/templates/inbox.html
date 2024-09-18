@@ -1,54 +1,125 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Inbox</h2>
-<ul class="list-group" id="inbox-messages">
-    {% for message in messages %}
-    <li class="list-group-item {% if not message.is_read %}font-weight-bold{% endif %}">
-        <a href="#">{{ message.sender }}: {{ message.decrypted_content|truncatewords:10 }}</a>
-        <small class="text-muted float-right">{{ message.timestamp }}</small>
-    </li>
-    {% empty %}
-    <li class="list-group-item">No messages to display.</li>
-    {% endfor %}
-</ul>
+<div class="block max-w-5xl mx-auto my-10 px-6">
+    <div class="row">
+        <!-- Inbox: List of Senders -->
+        <div class="col-md-4 bg-dark text-white rounded-5 shadow p-4">
+            <h2 class="text-success mb-4">Inbox</h2>
+
+            <div class="col-md-12 mb-4">
+                <form method="GET" action="">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Search users by username..." value="{{ request.GET.search }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <ul class="list-unstyled">
+                {% if senders %}
+                    {% for sender in senders %}
+                    <li class="py-2 border-bottom border-secondary">
+                        <a href="?recipient={{ sender.id }}{% if search_query %}&search={{ search_query }}{% endif %}" class="text-white text-decoration-none d-block">
+                            <div class="d-flex align-items-center">
+                                {% if sender.profile_image_url %}
+                                    <img class="rounded-circle mr-2" src="{{ sender.profile_image_url }}" alt="{{ sender.username }}" width="40" height="40">
+                                {% else %}
+                                    <i class="bi bi-person-circle text-white" style="font-size: 40px;"></i>
+                                {% endif %}
+                                <div class="flex-grow-1">
+                                    <span class="font-weight-bold">&nbsp;{{ sender.username }}</span>
+                                    <br>
+                                    <small class="text-muted">{{ sender.latest_message.timestamp|date:"M d, Y h:i A" }}</small>
+                                </div>
+                                {% if sender.unread_count > 0 %}
+                                <span class="badge badge-danger ml-auto">{{ sender.unread_count }}</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <p>No senders found.</p>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="col-md-8">
+            {% if recipient %}
+            <div class="chat-window h-100 d-flex flex-column bg-dark text-white rounded-3 shadow p-3">
+                <h2 class="text-light mb-4 d-flex align-items-center">
+                    <i class="bi bi-chat-dots mr-2" style="font-size: 24px;"></i> 
+                    Chat with&nbsp;<span class="font-weight-bold">{{ recipient.username }}</span>
+                </h2>
+                <ul class="list-unstyled overflow-auto flex-grow-1 mb-3">
+                    {% for message in messages %}
+                    <li class="d-flex {% if message.sender == user %}justify-content-end{% else %}justify-content-start{% endif %} mb-3">
+                        <div class="{% if message.sender == user %}bg-success text-white{% else %}bg-light text-dark{% endif %} p-3 rounded shadow-sm">
+                            <span>{{ message.content }}</span>
+                            <br>
+                            <small class="text-muted">{{ message.timestamp|date:"M d, Y h:i A" }}</small>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                
+                <!-- Message Input Form -->
+                <div class="mt-3">
+                    <form id="chat_message_form" method="POST" class="d-flex">
+                        {% csrf_token %}
+                        <input type="text" name="message" placeholder="Type a message..." maxlength="150" class="form-control mr-2" required>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-send"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="bg-dark text-muted rounded-3 shadow d-flex align-items-center justify-content-center" style="height: 100%; min-height: 45rem;">
+                <p>Select a user from the inbox to start chatting.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- WebSocket and Message Handling -->
+{% if recipient %}
 <script>
-    const userName = '{{ request.user.username }}';
+    const roomName = "{{ request.user.username }}_{{ recipient.username }}";  
     const chatSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/chat/' + userName + '/'
+        'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
     );
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        const chatLog = document.querySelector('#inbox-messages');
-        const newMessage = document.createElement('li');
-        newMessage.className = 'list-group-item';
-        newMessage.textContent = `${data.sender}: ${data.message}`;
-        chatLog.appendChild(newMessage);
+        const message = data.message;
+        const sender = data.sender;
+
+        const newMessage = `
+            <li class="d-flex ${sender === "{{ request.user.username }}" ? 'justify-content-end' : 'justify-content-start'} mb-3">
+                <div class="bg-${sender === "{{ request.user.username }}" ? 'success text-white' : 'light text-dark'} p-3 rounded shadow-sm">
+                    <span>${message}</span>
+                </div>
+            </li>
+        `;
+        document.querySelector('#chat_messages').innerHTML += newMessage;
     };
 
-    chatSocket.onclose = function(e) {
-        console.error('Chat socket closed unexpectedly');
+    document.querySelector('#chat_message_form').onsubmit = function(e) {
+        e.preventDefault();
+        const messageInputDom = document.querySelector('input[name="message"]');
+        const message = messageInputDom.value;
+
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+        messageInputDom.value = '';
     };
 </script>
-<ul class="nav flex-column">
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'sent_messages' %}">
-            <i class="bi bi-send-check"></i>
-            Sent.
-        </a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'compose_message' %}">
-            <i class="bi bi-chat-left-text"></i>
-            Send Message.
-        </a>
-    </li>
-</ul>
-<!-- <li><a class="dropdown-item" href="{% url 'sent_messages' %}">Sent</a></li>
-<li><a class="dropdown-item" href="{% url 'compose_message' %}">Send Message</a></li> -->
+{% endif %}
 
 {% endblock %}
-
-
-For a sent message, you can use <i class="bi bi-send-check"></i>, and for a send message icon, you can use <i class="bi bi-chat-left-text"></i>

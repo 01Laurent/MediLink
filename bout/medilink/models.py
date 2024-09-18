@@ -113,27 +113,16 @@ class Notification(models.Model):
     
 class Message(models.Model):
     sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
-    receiver = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
-    encrypted_content = models.TextField(blank=True, null=True)
+    recipient = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)
-
-    def save(self, *args, **kwargs):
-        if self.pk is None and self.content: 
-            fernet = Fernet(settings.ENCRYPTION_KEY)
-            self.encrypted_content = fernet.encrypt(self.content.encode()).decode()
-        #     self.content = None
-        # elif self.pk and self.encrypted_content and not self.content:
-        #      fernet = Fernet(settings.ENCRYPTION_KEY)
-        #      self.content = fernet.decrypt(self.encrypted_content.encode()).decode()
-        super().save(*args, **kwargs)
-
-    def get_decrypted_content(self):
-        if self.encrypted_content:
-            fernet = Fernet(settings.ENCRYPTION_KEY)
-            return fernet.decrypt(self.encrypted_content.encode()).decode()
-        return self.content
+    read = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Message from {self.sender} to {self.receiver} at {self.timestamp}"
+        return f"From {self.sender} to {self.recipient} at {self.timestamp}"
+    def mark_as_read(self):
+        self.read = True
+        self.save()
+
+    class Meta:
+        ordering = ['-timestamp']

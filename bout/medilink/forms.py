@@ -54,18 +54,18 @@ class DoctorAvailabilityForm(forms.ModelForm):
         model = DoctorAvailability
         fields = ['day', 'start_time', 'end_time']
 
-class MessageForm(forms.ModelForm):
-    class Meta:
+# class MessageForm(forms.ModelForm):
+#     class Meta:
 
-        model = Message
-        fields = ['receiver', 'content']
-        widgets = {
-            'receiver': forms.Select(attrs={'class': 'form-control'}),
-            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
-        }
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['receiver'].queryset = User.objects.exclude(id=self.initial.get('exclude_user_id'))
+#         model = Message
+#         fields = ['receiver', 'content']
+#         widgets = {
+#             'receiver': forms.Select(attrs={'class': 'form-control'}),
+#             'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+#         }
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.fields['receiver'].queryset = User.objects.exclude(id=self.initial.get('exclude_user_id'))
 
 class SearchForm(forms.Form):
     query = forms.CharField(label='Search Doctors', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
