@@ -31,14 +31,14 @@
                             <td>{{ appointment.appointment_date }}</td>
                             <td>{{ appointment.appointment_time }}</td>
                             <td>
-                                <span class="badge {% if appointment.is_treated %}badge-success{% elif appointment.is_not_treated %}badge-danger{% else %}badge-warning{% endif %}">
+                                <span class="badge {% if appointment.is_treated %}badge-success{% elif appointment.is_not_treated %}badge-info{% else %}badge-warning{% endif %}">
                                     {{ appointment.status }}
                                 </span>
                             </td>
                             <td>
                                 {% if not appointment.is_treated and not appointment.is_not_treated %}
-                                <button class="btn btn-sm btn-success" onclick="showRatingForm('{{ appointment.id }}')">Treated</button>
-                                <button class="btn btn-sm btn-danger" onclick="showReasonForm('{{ appointment.id }}')">Not Treated</button>
+                                <button class="btn btn-sm btn-dark" onclick="showRatingForm('{{ appointment.id }}')">Treated</button>
+                                <button class="btn btn-sm btn-info" onclick="showReasonForm('{{ appointment.id }}')">Not Treated</button>
                                 {% elif appointment.is_treated %}
                                 <p><strong>Rated: {{ appointment.rating }} stars</strong></p>
                                 {% elif appointment.is_not_treated %}

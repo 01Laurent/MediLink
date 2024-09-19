@@ -55,8 +55,8 @@
             <td>
                 {% if appointment.status == 'pending' %}
                     <!-- Show actions for pending appointments only -->
-                    <a href="{% url 'respond_to_appointment' appointment.id 'accept' %}" class="btn btn-success">Accept</a>
-                    <button class="btn btn-danger" onclick="openRejectModal('{{ appointment.id }}')">Reject</button>
+                    <a href="{% url 'respond_to_appointment' appointment.id 'accept' %}" class="btn btn-dark">Accept</a>
+                    <button class="btn btn-info" onclick="openRejectModal('{{ appointment.id }}')">Reject</button>
                     <!-- <a href="{% url 'respond_to_appointment' appointment.id 'reject' %}" class="btn btn-danger">Reject</a> -->
                 {% else %}
                     <!-- Show status if already accepted/rejected -->
