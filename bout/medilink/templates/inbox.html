@@ -54,7 +54,7 @@
                     <i class="bi bi-chat-dots mr-2" style="font-size: 24px;"></i> 
                     Chat with&nbsp;<span class="font-weight-bold">{{ recipient.username }}</span>
                 </h2>
-                <ul class="list-unstyled overflow-auto flex-grow-1 mb-3">
+                <ul id="chat_messages" class="list-unstyled overflow-auto flex-grow-1 mb-3">
                     {% for message in messages %}
                     <li class="d-flex {% if message.sender == user %}justify-content-end{% else %}justify-content-start{% endif %} mb-3">
                         <div class="{% if message.sender == user %}bg-success text-white{% else %}bg-light text-dark{% endif %} p-3 rounded shadow-sm">
@@ -70,7 +70,7 @@
                 <div class="mt-3">
                     <form id="chat_message_form" method="POST" class="d-flex">
                         {% csrf_token %}
-                        <input type="text" name="message" placeholder="Type a message..." maxlength="150" class="form-control mr-2" required>
+                        <input id="chat_message_input" type="text" name="message" placeholder="Type a message..." maxlength="150" class="form-control mr-2" required>
                         <button type="submit" class="btn btn-success">
                             <i class="bi bi-send"></i>
                         </button>
@@ -89,36 +89,59 @@
 <!-- WebSocket and Message Handling -->
 {% if recipient %}
 <script>
-    const roomName = "{{ request.user.username }}_{{ recipient.username }}";  
-    const chatSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
-    );
+    const roomName = "{{ request.user.username }}_{{ recipient.username }}";
+    let chatSocket;
 
-    chatSocket.onmessage = function(e) {
-        const data = JSON.parse(e.data);
-        const message = data.message;
-        const sender = data.sender;
+    function createWebSocket() {
+        chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+        );
 
-        const newMessage = `
-            <li class="d-flex ${sender === "{{ request.user.username }}" ? 'justify-content-end' : 'justify-content-start'} mb-3">
-                <div class="bg-${sender === "{{ request.user.username }}" ? 'success text-white' : 'light text-dark'} p-3 rounded shadow-sm">
-                    <span>${message}</span>
-                </div>
-            </li>
-        `;
-        document.querySelector('#chat_messages').innerHTML += newMessage;
-    };
+        chatSocket.onopen = function() {
+            console.log('WebSocket connection established');
+        };
 
-    document.querySelector('#chat_message_form').onsubmit = function(e) {
-        e.preventDefault();
-        const messageInputDom = document.querySelector('input[name="message"]');
-        const message = messageInputDom.value;
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const message = data.message;
+            const sender = data.sender;
 
-        chatSocket.send(JSON.stringify({
-            'message': message
-        }));
-        messageInputDom.value = '';
-    };
+            const newMessage = `
+                <li class="d-flex ${sender === "{{ request.user.username }}" ? 'justify-content-end' : 'justify-content-start'} mb-3">
+                    <div class="bg-${sender === "{{ request.user.username }}" ? 'success text-white' : 'light text-dark'} p-3 rounded shadow-sm">
+                        <span>${message}</span>
+                    </div>
+                </li>
+            `;
+            document.querySelector('#chat_messages').innerHTML += newMessage;
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('WebSocket connection closed unexpectedly. Reconnecting...');
+            setTimeout(createWebSocket, 1000); // Reconnect after 1 second
+        };
+
+        chatSocket.onerror = function(err) {
+            console.error('WebSocket error observed:', err);
+        };
+
+        document.querySelector('#chat_message_form').onsubmit = function(e) {
+            e.preventDefault();
+            const messageInputDom = document.querySelector('input[name="message"]');
+            const message = messageInputDom.value;
+
+            if (chatSocket.readyState === WebSocket.OPEN) {
+                chatSocket.send(JSON.stringify({
+                    'message': message
+                }));
+                messageInputDom.value = '';
+            } else {
+                console.error("WebSocket is not open: ", chatSocket.readyState);
+            }
+        };
+    }
+
+    createWebSocket();  // Initialize WebSocket connection
 </script>
 {% endif %}
 

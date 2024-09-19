@@ -238,6 +238,11 @@ def home(request):
     results = list(doctors.values('id', 'user__first_name', 'user__last_name', 'specialty', 'location', 'is_available'))
     return JsonResponse({'doctors': results})
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.db.models import Q
+from .models import Message, User
+
 @login_required
 def chat_inbox(request):
     recipient_id = request.GET.get('recipient')
@@ -257,11 +262,13 @@ def chat_inbox(request):
 
     # Fetch chat messages with the selected recipient (if any)
     if recipient:
+        # Fetch messages between the current user and the recipient
         messages = Message.objects.filter(
             (Q(sender=request.user) & Q(recipient=recipient)) |
             (Q(sender=recipient) & Q(recipient=request.user))
         ).order_by('timestamp')
 
+        # If a message is posted, save it to the database
         if request.method == 'POST':
             message_content = request.POST.get('message')
             if message_content:
@@ -270,19 +277,25 @@ def chat_inbox(request):
                     recipient=recipient,
                     content=message_content
                 )
-            return redirect('inbox')
+            return redirect('chat_inbox')  # Redirect to avoid form resubmission
+
+        # Generate room name based on usernames (e.g., "user1_user2")
+        room_name = f"{request.user.username}_{recipient.username}"
 
     else:
         messages = []
+        room_name = None  # No room selected if no recipient
 
     context = {
         'senders': senders,
         'messages': messages,
         'recipient': recipient,
-        'search_query': search_query,  # Pass the search query to the template to keep the input field populated
+        'room_name': room_name,  # Pass the room name to the template for WebSocket connection
+        'search_query': search_query,  # Keep the search query populated in the input
     }
 
     return render(request, 'inbox.html', context)
+
 
 # @login_required
 # def chat_inbox(request):
