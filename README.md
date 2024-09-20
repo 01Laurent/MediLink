@@ -16,5 +16,17 @@ To run the application▶️
    - You'll now be able to use the app.
 
      *This is how the web app looks like.
-        - Here one chooses whether he or she is a Doctor or a Patient.
-         ![Registration Page](https://github.com/01Laurent/MediLink/blob/main/bout/docs/registration.png)
+   - Here one chooses whether he or she is a Doctor or a Patient.
+![Registration Page](https://github.com/01Laurent/MediLink/blob/main/bout/docs/registration.png)
+   - On the home page one can search for a doctor and choose the doctor of their choice according to their Location and also the availability of the doctor.
+![Search Prompt](https://github.com/01Laurent/MediLink/blob/main/bout/docs/search.png)
+   - The search Results.
+![Search Results](https://github.com/01Laurent/MediLink/blob/main/bout/docs/search_results.png)
+   - Login Page, when you try to request an appointment and you are not logged in you'll be rediredcted to the login page and if you dont have an account you'll be prompted to create one.
+![Login Page](https://github.com/01Laurent/MediLink/blob/main/bout/docs/login.png)
+   - After successful registration if you are a doctor this is how the dashboard looks like, this one is an example of a doctors dashboard.
+![An Example of a Doctors Dashboard](https://github.com/01Laurent/MediLink/blob/main/bout/docs/doc_dash.png)
+   - Here is the patients dashboard, the patient can see whether a doctor accepted or they rejected an appointment and the doctor sets the appointment time and date and the patient responds if they'll be available.
+![Login Page](https://github.com/yourusername/your-repo-name/blob/main/images/login.png)
+   - The web app also has notifications where a doctor is notified if someone requests an appointment and on the patients side they are notified when the doctors sets an appointment and the appointment date. One is also reminded a day before that their appointment is due.
+![Notifications Page](https://github.com/01Laurent/MediLink/blob/main/bout/docs/notifications.png)
