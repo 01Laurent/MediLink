@@ -85,21 +85,15 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="{% url 'home' %}">
                             <i class="bi bi-house-door icon"></i>
-                            Home
+                            Home.
                         </a>
                     </li>
                     {% if user.is_authenticated %}
                         {% if user.patientsprofile %}
                             <li class="nav-item"></li>
-                                <a class="nav-link" href="{% url 'pat_edit_profile' user.patientsprofile.pk %}">
-                                    <i class="bi bi-pencil-fill icon"></i>
-                                    Edit Profile.
-                                </a>
-                            </li>
-                            <li class="nav-item"></li>
                                 <a class="nav-link" href="{% url 'pat_dashboard' %}">
                                     <i class="bi bi-speedometer2 icon"></i>
-                                    Dashboard
+                                    Dashboard.
                                 </a>
                             </li>
                             <li class="nav-item"></li>
@@ -115,45 +109,32 @@
                     <li class="nav-item"></li>
                         <a class="nav-link" href="{% url 'doc_dashboard' %}">
                             <i class="bi bi-speedometer2 icon"></i>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item"></li>
-                        <a class="nav-link" href="{% url 'doc_edit_profile' user.doctorprofile.pk %}">
-                            <i class="bi bi-pencil-fill icon"></i>
-                            Edit Profile.
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'appointment_list' %}">
-                            <i class="bi bi-hourglass-split icon"></i>
-                            Appointments
+                            Dashboard.
                         </a>
                     </li>
                     <li class="nav-item"></li>
                         <a class="nav-link" href="{% url 'notifications' %}">
                             <i class="fas fa-bell icon"></i>
-                            Notifications({{ unread_count }})
+                            Notifications.({{ unread_count }})
                         </a>
                     </li>
                         {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'inbox' %}">
                             <i class="bi bi-inbox icon"></i>
-                            Inbox
+                            Inbox.
                         </a>
                     </li>
                     {% else %}
                     <li class="nav-item"></li>
                         <a class="nav-link" href="{% url 'login' %}">
                             <i class="bi bi-box-arrow-in-right icon"></i>
-                            Login</a>
+                            Login.</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi-person-plus icon"></i>
-                            Register
+                            Register.
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{% url 'doctor_register' %}">Doctor</a></li>
@@ -190,7 +171,7 @@
                                 {% csrf_token %}
                                 <button type="submit" class="nav-link">
                                     <i class="bi bi-box-arrow-right icon"></i>
-                                    Logout
+                                    Logout.
                                 </button>
                             </form>
                         </li>                        
