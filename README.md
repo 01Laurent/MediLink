@@ -17,4 +17,4 @@ To run the application▶️
 
      *This is how the web app looks like.
         - Here one chooses whether he or she is a Doctor or a Patient.
-     ![Registration]([https://your-image-url.com/image.png](https://github.com/01Laurent/MediLink/blob/main/bout/docs/registration.png?raw=true)
+     ![Registration]([https://your-image-url.com/image.png](https://github.com/01Laurent/MediLink/blob/main/bout/docs/registration.png?raw=true))
