@@ -24,7 +24,7 @@ Below are the objectives i want to achieve and some are already achieved.
    - Health tracking(i.e step count, heart rate)
    -Health risks assessments.
 
-- Tech has always been my wakeup call all the time everynow and then.
+*Tech has always been my wakeup call all the time everynow and then.
     - When i was growing up i have always seen people struggle trying to get to health facilities and most of the times even if they went, some would get ome untreated maybe because the doctor they found is not an expert on the sickness the patient had.
     - So i decided i would one day create a system that has doctors of all expertise and also bring in the patients so they would choose their doctor of choice and get the best experience ever.
     - I decided to work on a virtual consultation app that will allow doctors and patients to consult virtually without having to go to the hospitals where they go and queue for hours and maybe also not get treated.
