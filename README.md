@@ -27,6 +27,6 @@ To run the application▶️
    - After successful registration if you are a doctor this is how the dashboard looks like, this one is an example of a doctors dashboard.
 ![An Example of a Doctors Dashboard](https://github.com/01Laurent/MediLink/blob/main/bout/docs/doc_dash.png)
    - Here is the patients dashboard, the patient can see whether a doctor accepted or they rejected an appointment and the doctor sets the appointment time and date and the patient responds if they'll be available.
-![Login Page](https://github.com/yourusername/your-repo-name/blob/main/images/login.png)
+![Patients Dashboard](https://github.com/01Laurent/MediLink/blob/main/bout/docs/pat%20dash.png)
    - The web app also has notifications where a doctor is notified if someone requests an appointment and on the patients side they are notified when the doctors sets an appointment and the appointment date. One is also reminded a day before that their appointment is due.
 ![Notifications Page](https://github.com/01Laurent/MediLink/blob/main/bout/docs/notifications.png)
