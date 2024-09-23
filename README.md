@@ -3,7 +3,26 @@ A Web app that connects Patients to Doctors, and also uses trending features lik
 
     * Below is the Documentation!!
 Below are the objectives i want to achieve and some are already achieved.
-![Objectives!](https://github.com/01Laurent/MediLink/blob/main/bout/docs/Objectives.png)
+   - user registration and profle management.
+   - Doctor search functionality.
+   - Appointment scheduling.
+   - Telemedicine video consultations.
+   - In-App messaging.
+   - Health records and management.
+   - prescription management.
+   - symptom checker.
+   - Chatbot for FAQs.
+   - Reminders for appointments and medications.
+   - User ratings and reviews for doctors.
+   - payment intergration.
+   - Insurance information management.
+   - Educational resources and articles.
+   - Multi-language support.
+   - Emergency services contacts.
+   - Feedback and support system.
+   - Data analytics dashboard for patients and doctors.
+   - Health tracking(i.e step count, heart rate)
+   -Health risks assessments.
 
 - Tech has always been my wakeup call all the time everynow and then.
     - When i was growing up i have always seen people struggle trying to get to health facilities and most of the times even if they went, some would get ome untreated maybe because the doctor they found is not an expert on the sickness the patient had.
