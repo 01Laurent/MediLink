@@ -2,6 +2,9 @@
 A Web app that connects Patients to Doctors, and also uses trending features like AI to help the Patients.
 
     * Below is the Documentation!!
+Below are the objectives i want to achieve and some are already achieved.
+![Objectives!](https://github.com/01Laurent/MediLink/blob/main/bout/docs/Objectives.png)
+
 - Tech has always been my wakeup call all the time everynow and then.
     - When i was growing up i have always seen people struggle trying to get to health facilities and most of the times even if they went, some would get ome untreated maybe because the doctor they found is not an expert on the sickness the patient had.
     - So i decided i would one day create a system that has doctors of all expertise and also bring in the patients so they would choose their doctor of choice and get the best experience ever.
