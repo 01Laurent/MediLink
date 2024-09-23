@@ -22,3 +22,4 @@ urlpatterns = [
     path('', include('medilink.urls')),
     path('accounts/', include('accounts.urls')),
 ]
+
