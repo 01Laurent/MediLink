@@ -1,5 +1,5 @@
 # MediLink
-*A Web app that connects Patients to Doctors, and also uses trending features like AI to help the Patients.
+
 Technology has always been my guiding light, inspiring me to make a difference in the world. Growing up, I witnessed the struggles of countless individuals trying to access healthcare. Many faced long, arduous journeys to health facilities, only to leave without the care they desperately needed—often because they didn’t find the right specialist for their condition. This experience ignited a passion in me to create a solution.
 
 I envisioned a groundbreaking system that connects patients with doctors of all specialties, allowing them to choose the healthcare professional best suited to their needs. Thus, I embarked on a mission to develop a virtual consultation app that revolutionizes the way healthcare is delivered. This innovative platform enables patients to consult with doctors from the comfort of their homes, eliminating the need for long waits in crowded hospitals.
