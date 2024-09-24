@@ -3,20 +3,20 @@ A Web app that connects Patients to Doctors, and also uses trending features lik
 
     * Below is the Documentation!!
 Below are the objectives i want to achieve and some are already achieved.
-   - user registration and profle management.
-   - Doctor search functionality.
-   - Appointment scheduling.
+   - user registration and profle management.✅️
+   - Doctor search functionality.✅️
+   - Appointment scheduling.✅️
    - Telemedicine video consultations.
-   - In-App messaging.
+   - In-App messaging.✅️
    - Health records and management.
    - prescription management.
    - symptom checker.
    - Chatbot for FAQs.
-   - Reminders for appointments and medications.
-   - User ratings and reviews for doctors.
+   - Reminders for appointments and medications.✅️
+   - User ratings and reviews for doctors.✅️
    - payment intergration.
    - Insurance information management.
-   - Educational resources and articles.
+   - Educational resources and articles.✅️
    - Multi-language support.
    - Emergency services contacts.
    - Feedback and support system.
