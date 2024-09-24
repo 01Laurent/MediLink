@@ -1,5 +1,12 @@
 # MediLink
-A Web app that connects Patients to Doctors, and also uses trending features like AI to help the Patients.
+*A Web app that connects Patients to Doctors, and also uses trending features like AI to help the Patients.
+Technology has always been my guiding light, inspiring me to make a difference in the world. Growing up, I witnessed the struggles of countless individuals trying to access healthcare. Many faced long, arduous journeys to health facilities, only to leave without the care they desperately needed—often because they didn’t find the right specialist for their condition. This experience ignited a passion in me to create a solution.
+
+I envisioned a groundbreaking system that connects patients with doctors of all specialties, allowing them to choose the healthcare professional best suited to their needs. Thus, I embarked on a mission to develop a virtual consultation app that revolutionizes the way healthcare is delivered. This innovative platform enables patients to consult with doctors from the comfort of their homes, eliminating the need for long waits in crowded hospitals.
+
+With our app, patients can easily request appointments with their preferred doctors. Once an appointment is accepted, doctors can set a convenient date and time for the virtual meeting. If a doctor feels that another specialist would be more appropriate for a patient’s condition, they have the option to refer them to the right expert.
+
+This is not just an app; it's a transformative experience aimed at enhancing patient care and making healthcare accessible to everyone. Together, we can bridge the gap between patients and the expertise they need, ensuring that no one goes untreated.
 
     * Below is the Documentation!!
 Below are the objectives i want to achieve and some are already achieved.
@@ -23,12 +30,6 @@ Below are the objectives i want to achieve and some are already achieved.
    - Data analytics dashboard for patients and doctors.
    - Health tracking(i.e step count, heart rate)
    -Health risks assessments.
-
-*Tech has always been my wakeup call all the time everynow and then.
-    - When i was growing up i have always seen people struggle trying to get to health facilities and most of the times even if they went, some would get ome untreated maybe because the doctor they found is not an expert on the sickness the patient had.
-    - So i decided i would one day create a system that has doctors of all expertise and also bring in the patients so they would choose their doctor of choice and get the best experience ever.
-    - I decided to work on a virtual consultation app that will allow doctors and patients to consult virtually without having to go to the hospitals where they go and queue for hours and maybe also not get treated.
-    - The app allows patients to request for appointments from the doctor of their choice and when doctors accept the appointments they set the date and time they want to meeet the patient, the doctor can also reject an appointment and refer the patient to another doctor.
 
 To run the application▶️
    - Git clone
