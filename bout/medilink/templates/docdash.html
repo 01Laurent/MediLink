@@ -41,6 +41,7 @@
             <th>Patient</th>
             <th>Appointment Date</th>
             <th>Appointment Time</th>
+            <th>Notes</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>
@@ -51,6 +52,7 @@
             <td>{{ appointment.patient.user.get_full_name }}</td> <!-- Patient's full name -->
             <td>{{ appointment.appointment_date }}</td>
             <td>{{ appointment.appointment_time }}</td>
+            <td>{{ appointment.notes }}</td>
             <td>{{ appointment.get_status_display }}</td> <!-- Human-readable status (pending, accepted, rejected) -->
             <td>
                 {% if appointment.status == 'pending' %}

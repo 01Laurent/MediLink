@@ -1,10 +1,26 @@
 {% extends 'base.html' %}
-{% block content %}
-<h2>Set Appointment Time for {{ appointment.patient.user.first_name }} {{ appointment.patient.user.last_name }}</h2>
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Save Appointment</button>
-</form>
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Card to wrap the appointment setting form -->
+            <div class="card shadow-lg">
+                <div class="card-header bg-secondary text-white text-center">
+                    <h2 class="mb-0">Set Appointment Time</h2>
+                    <p class="lead mt-2">{{ appointment.patient.user.first_name }} {{ appointment.patient.user.last_name }}</p>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-dark btn-lg">Save Appointment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

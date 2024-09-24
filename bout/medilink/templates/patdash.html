@@ -18,8 +18,9 @@
                     <thead class="thead-dark">
                         <tr>
                             <th>Doctor</th>
-                            <th>Date</th>
-                            <th>Time</th>
+                            <th>Appointment Date</th>
+                            <th>Appointment Time</th>
+                            <th>Notes</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -30,6 +31,7 @@
                             <td>Dr. {{ appointment.doctor.user.first_name }}</td>
                             <td>{{ appointment.appointment_date }}</td>
                             <td>{{ appointment.appointment_time }}</td>
+                            <td>{{ appointment.notes }}</td>
                             <td>
                                 <span class="badge {% if appointment.is_treated %}badge-success{% elif appointment.is_not_treated %}badge-info{% else %}badge-warning{% endif %}">
                                     {{ appointment.status }}

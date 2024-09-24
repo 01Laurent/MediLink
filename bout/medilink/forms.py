@@ -23,9 +23,10 @@ class AppointmentRequestForm(forms.ModelForm):
 class SetAppointmentForm(forms.ModelForm):
     appointment_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
     appointment_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    notes = forms.CharField(max_length=500, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Include the location and probably anything the patient should have.'}))
     class Meta:
         model = Appointment
-        fields = ['appointment_date', 'appointment_time']
+        fields = ['appointment_date', 'appointment_time', 'notes']
 
 class FeedbackForm(forms.Form):
     TREATED_CHOICES = [(True, 'Treated'), (False, 'Not Treated')]

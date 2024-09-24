@@ -191,27 +191,37 @@
         </div>
     {% endif %}
 </div> -->
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4"> <!-- Adjust the column size as needed -->
-                <div class="card shadow-sm p-3 text-center" style="background-color: black; color: white;">
-                    <!-- Content here -->
-                    <p class="fs-5 lead">
-                        This is where all doctors and patients connect.
+<div class="container mt-5">
+    <div class="row">
+        <!-- First Column: Doctors and Patients Section -->
+        <div class="col-md-6"> <!-- Set to col-md-6 for equal width -->
+            <div class="card shadow-sm p-3 text-center" style="background-color: black; color: white;">
+                <!-- Content here -->
+                <p class="fs-5 lead">
+                    This is where all doctors and patients connect.
+                </p>
+                <div class="d-grid gap-1 col-md-8 mx-auto">
+                    <p>Are you a <strong>Doctor</strong> seeking to help patients?<br>
+                        <a href="{% url 'doctor_register' %}" class="btn btn-light btn-lg">Register.</a><br><br>
                     </p>
-                    <div class="d-grid gap-1 col-md-5 mx-auto">
-                        <p>
-                            Are you a <strong>Doctor</strong> seeking to help patients? 
-                            <a href="{% url 'doctor_register' %}" class="btn btn-light btn-lg">Register.</a>
-                        </p>
-                        <p>
-                            Are you a <strong>Patient</strong> seeking consultation? 
-                            <a href="{% url 'patient_register' %}" class="btn btn-light btn-lg">Register.</a>
-                        </p>
-                        <p>
-                            Already have an account? 
-                            <a href="{% url 'login' %}" class="btn btn-light btn-lg">Sign In.</a>
-                        </p>
+                    <p>Are you a <strong>Patient</strong> seeking consultation? 
+                        <a href="{% url 'patient_register' %}" class="btn btn-light btn-lg">Register.</a><br><br>
+                    </p>
+                    <p>Already have an account?<br> 
+                        <a href="{% url 'login' %}" class="btn btn-light btn-lg">Sign In.</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Column: Mental Health Resources Section -->
+        <div class="col-md-6"> <!-- Set to col-md-6 for equal width -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Tips on how to stay healthy.</h5>
+                    <img src="https://images.pexels.com/photos/5842226/pexels-photo-5842226.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top" alt="...">
+                    <p class="card-text">An article about staying emotionally healthy in difficult times.</p>
+                    <a href="https://www.health.harvard.edu/topics/staying-healthy" class="btn btn-info">Read more</a>
                 </div>
             </div>
         </div>

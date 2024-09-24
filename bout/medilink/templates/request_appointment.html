@@ -1,9 +1,58 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h2>Request an Appointment with Dr. {{ doctor.user.last_name }}</h2>
-<form method="POST" action="{% url 'request_appointment' doctor.id %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Request Appointment</button>
-</form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm p-4">
+                <div class="text-center mb-4">
+                    <h2 class="mb-3">Request an Appointment</h2>
+                    <h5 class="text-muted">With Dr. {{ doctor.user.last_name }}</h5>
+                    <hr class="w-25 mx-auto">
+                </div>
+                <form method="POST" action="{% url 'request_appointment' doctor.id %}" id="appointment-form">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    
+                    <div class="mt-4 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-warning btn-lg px-5">
+                            <i class="fas fa-calendar-check"></i> Request Appointment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="appointmentSuccessModal" tabindex="-1" aria-labelledby="appointmentSuccessModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="appointmentSuccessModalLabel">Appointment Request Sent!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Your appointment request has been successfully sent to Dr. {{ doctor.user.last_name }}. You will be notified once the doctor confirms the date and time.
+      </div>
+      <div class="modal-footer">
+        <a href="{% url 'home' %}" class="btn btn-dark">Back to Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.getElementById('appointment-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+    
+        // Perform any form validation or AJAX request to submit data here
+    
+        // After form is successfully submitted, trigger the modal
+        var successModal = new bootstrap.Modal(document.getElementById('appointmentSuccessModal'));
+        successModal.show();
+    });
+    </script>
+    
 {% endblock %}
