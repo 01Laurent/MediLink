@@ -2,6 +2,13 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'medilink/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'medilink/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'medilink/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'medilink/site.webmanifest' %}">
+    <link rel="mask-icon" href="{% static 'medilink/safari-pinned-tab.svg' %}" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="theme-color" content="#ffffff">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Medilink</title>
@@ -43,6 +50,22 @@
     .icon {
         color: aqua;
     }
+    .footer {
+            background-color: #6c757d;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        .footer h5 {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .footer p {
+            margin: 0;
+        }
 </style>
 <body>
 
@@ -188,7 +211,14 @@
     </div>
 </div>
 
-
+<footer class="footer"></footer>
+    <div class="container">
+        <h5>About MediLink</h5>
+        &copy   2024
+        <p>MediLink is dedicated to bridging the gap between patients and healthcare professionals, providing a platform for seamless virtual consultations. Our mission is to ensure that everyone has access to quality healthcare, no matter where they are.</p>
+        <p>Join us in transforming the healthcare experience—because your health matters.</p>
+    </div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
